@@ -345,6 +345,166 @@ function afq_signup_is_valid_jalali_date( $value ) {
 	return $jd <= afq_jalali_month_length( $jy, $jm );
 }
 
+/**
+ * Gregorian date to Julian Day Number.
+ *
+ * @param int $gy Gregorian year.
+ * @param int $gm Gregorian month (1-12).
+ * @param int $gd Gregorian day.
+ * @return int
+ */
+function afq_jalali_g2d( $gy, $gm, $gd ) {
+
+	$gy = (int) $gy;
+	$gm = (int) $gm;
+	$gd = (int) $gd;
+
+	$d = afq_jalali_div( ( $gy + afq_jalali_div( $gm - 8, 6 ) + 100100 ) * 1461, 4 )
+		+ afq_jalali_div( 153 * afq_jalali_mod( $gm + 9, 12 ) + 2, 5 )
+		+ $gd - 34840408;
+
+	return $d - afq_jalali_div( afq_jalali_div( $gy + 100100 + afq_jalali_div( $gm - 8, 6 ), 100 ) * 3, 4 ) + 752;
+}
+
+/**
+ * Julian Day Number back to a Gregorian date.
+ *
+ * @param int $jdn Julian Day Number.
+ * @return array{gy:int,gm:int,gd:int}
+ */
+function afq_jalali_d2g( $jdn ) {
+
+	$j = 4 * (int) $jdn + 139361631;
+	$j = $j + afq_jalali_div( afq_jalali_div( 4 * (int) $jdn + 183187720, 146097 ) * 3, 4 ) * 4 - 3908;
+	$i = afq_jalali_div( afq_jalali_mod( $j, 1461 ), 4 ) * 5 + 308;
+
+	$gd = afq_jalali_div( afq_jalali_mod( $i, 153 ), 5 ) + 1;
+	$gm = afq_jalali_mod( afq_jalali_div( $i, 153 ), 12 ) + 1;
+	$gy = afq_jalali_div( $j, 1461 ) - 100100 + afq_jalali_div( 8 - $gm, 6 );
+
+	return array(
+		'gy' => $gy,
+		'gm' => $gm,
+		'gd' => $gd,
+	);
+}
+
+/**
+ * Convert a Gregorian date to Jalali.
+ *
+ * Mirrors d2j() in assets/js/jalali-picker.js.
+ *
+ * @param int $gy Gregorian year.
+ * @param int $gm Gregorian month (1-12).
+ * @param int $gd Gregorian day.
+ * @return array|null Array with jy/jm/jd, or null outside the supported range.
+ */
+function afq_jalali_from_gregorian( $gy, $gm, $gd ) {
+
+	$jdn = afq_jalali_g2d( $gy, $gm, $gd );
+	$g   = afq_jalali_d2g( $jdn );
+	$jy  = $g['gy'] - 621;
+	$cal = afq_jalali_cal( $jy );
+
+	if ( ! $cal ) {
+		return null;
+	}
+
+	$k = $jdn - afq_jalali_g2d( $g['gy'], 3, $cal['march'] );
+
+	if ( $k >= 0 ) {
+		if ( $k <= 185 ) {
+			return array(
+				'jy' => $jy,
+				'jm' => 1 + afq_jalali_div( $k, 31 ),
+				'jd' => afq_jalali_mod( $k, 31 ) + 1,
+			);
+		}
+
+		$k -= 186;
+	} else {
+		$jy--;
+		$k += 179;
+
+		if ( 1 === $cal['leap'] ) {
+			$k++;
+		}
+	}
+
+	return array(
+		'jy' => $jy,
+		'jm' => 7 + afq_jalali_div( $k, 30 ),
+		'jd' => afq_jalali_mod( $k, 30 ) + 1,
+	);
+}
+
+/**
+ * Jalali month names, indexed 1-12.
+ *
+ * @return array
+ */
+function afq_jalali_month_names() {
+
+	return array(
+		1  => 'فروردین',
+		2  => 'اردیبهشت',
+		3  => 'خرداد',
+		4  => 'تیر',
+		5  => 'مرداد',
+		6  => 'شهریور',
+		7  => 'مهر',
+		8  => 'آبان',
+		9  => 'آذر',
+		10 => 'دی',
+		11 => 'بهمن',
+		12 => 'اسفند',
+	);
+}
+
+/**
+ * Convert English digits to Persian ones (display only).
+ *
+ * @param string $value Input value.
+ * @return string
+ */
+function afq_fa_digits( $value ) {
+
+	$en = array( '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' );
+	$fa = array( '۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹' );
+
+	return str_replace( $en, $fa, (string) $value );
+}
+
+/**
+ * Format a post's publish date as a Jalali label, e.g. «۱۸ مرداد ۱۴۰۳».
+ *
+ * Reads the date through get_the_date() so the site timezone applies.
+ *
+ * @param int    $post_id Post ID.
+ * @param string $format  'label' for «۱۸ مرداد ۱۴۰۳», 'numeric' for «۱۴۰۳/۰۵/۱۸».
+ * @return string Empty string when the date is outside the supported range.
+ */
+function afq_jalali_post_date( $post_id, $format = 'label' ) {
+
+	$jalali = afq_jalali_from_gregorian(
+		(int) get_the_date( 'Y', $post_id ),
+		(int) get_the_date( 'n', $post_id ),
+		(int) get_the_date( 'j', $post_id )
+	);
+
+	if ( ! $jalali ) {
+		return '';
+	}
+
+	if ( 'numeric' === $format ) {
+		return afq_fa_digits( sprintf( '%04d/%02d/%02d', $jalali['jy'], $jalali['jm'], $jalali['jd'] ) );
+	}
+
+	$months = afq_jalali_month_names();
+
+	return afq_fa_digits( $jalali['jd'] ) . ' ' . $months[ $jalali['jm'] ] . ' ' . afq_fa_digits( $jalali['jy'] );
+}
+
 /* -------------------------------------------------------------------------
  * Signup — Validation
  * ---------------------------------------------------------------------- */

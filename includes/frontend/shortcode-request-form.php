@@ -215,13 +215,30 @@ function afq_request_form_shortcode( $atts ) {
 
 			</div>
 
-			<div class="afq-voc__field afq-voc__field--terms" data-afq-field="terms" data-afq-required="1">
-				<label class="afq-voc__check afq-voc__check--terms">
-					<input type="checkbox" name="afq_request_terms" value="1" />
-					<span>قوانین و شرایط استفاده و حفظ حریم خصوصی را مطالعه کرده و می‌پذیرم.</span>
-				</label>
-				<span class="afq-voc__error" aria-live="polite"></span>
-			</div>
+			<?php
+			if ( ! empty( $settings['terms_enabled'] ) ) :
+				$terms_required = ! empty( $settings['terms_required'] );
+				$terms_text     = (string) $settings['terms_text'];
+				$terms_url      = (string) $settings['terms_url'];
+				?>
+				<div class="afq-voc__field afq-voc__field--terms" data-afq-field="terms"
+					data-afq-required="<?php echo $terms_required ? '1' : '0'; ?>">
+					<label class="afq-voc__check afq-voc__check--terms">
+						<input type="checkbox" name="afq_request_terms" value="1" />
+						<span>
+							<?php if ( '' !== $terms_url ) : ?>
+								<a href="<?php echo esc_url( $terms_url ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $terms_text ); ?></a>
+							<?php else : ?>
+								<?php echo esc_html( $terms_text ); ?>
+							<?php endif; ?>
+							<?php if ( $terms_required ) : ?>
+								<b>*</b>
+							<?php endif; ?>
+						</span>
+					</label>
+					<span class="afq-voc__error" aria-live="polite"></span>
+				</div>
+			<?php endif; ?>
 
 			<input type="text" name="afq_request_website" class="afq-voc__hp" tabindex="-1" autocomplete="off" />
 

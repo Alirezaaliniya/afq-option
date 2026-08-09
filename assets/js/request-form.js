@@ -476,11 +476,11 @@
 			}
 		} );
 
-		/* Consent. */
+		/* Consent — only when the settings page marks it required. */
 		var terms = form.querySelector( '[name="afq_request_terms"]' );
+		var termsField = terms ? fieldOf( terms ) : null;
 
-		if ( terms && ! terms.checked ) {
-			var termsField = fieldOf( terms );
+		if ( terms && ! terms.checked && termsField && '1' === termsField.getAttribute( 'data-afq-required' ) ) {
 			setError( termsField, I18N.terms || 'پذیرش قوانین و شرایط الزامی است.' );
 			if ( ! firstInvalid ) {
 				firstInvalid = termsField;

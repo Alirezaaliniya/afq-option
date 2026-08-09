@@ -231,8 +231,8 @@ function afq_request_ajax_submit() {
 		$data[ $key ] = $value;
 	}
 
-	/* Consent is always required. */
-	if ( empty( $_POST['afq_request_terms'] ) ) {
+	/* Consent — enforced only while both switches are on in the settings. */
+	if ( ! empty( $settings['terms_enabled'] ) && ! empty( $settings['terms_required'] ) && empty( $_POST['afq_request_terms'] ) ) {
 		$errors['terms'] = 'پذیرش قوانین و شرایط الزامی است.';
 	}
 
@@ -461,7 +461,7 @@ function afq_request_ajax_track() {
 			'status'  => $statuses[ $status ]['label'],
 			'color'   => $statuses[ $status ]['color'],
 			'bg'      => $statuses[ $status ]['bg'],
-			'date'    => get_the_date( 'Y/m/d', $post_id ),
+			'date'    => afq_jalali_post_date( $post_id ),
 			'type'    => get_post_meta( $post_id, '_afq_request_request_type', true ),
 			'subject' => get_post_meta( $post_id, '_afq_request_subject', true ),
 			'reply'   => get_post_meta( $post_id, '_afq_request_reply', true ),

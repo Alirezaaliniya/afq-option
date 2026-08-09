@@ -184,6 +184,31 @@ function afq_request_render_settings_page() {
 			</div>
 
 			<div class="afq-settings__card">
+				<h2>قوانین و شرایط</h2>
+				<div class="afq-settings__fields">
+
+					<?php afq_request_setting_toggle( 'afq_request[terms_enabled]', 'نمایش چک‌باکس قوانین و شرایط در فرم', ! empty( $settings['terms_enabled'] ) ); ?>
+
+					<?php afq_request_setting_toggle( 'afq_request[terms_required]', 'اجباری بودن پذیرش قوانین برای ارسال فرم', ! empty( $settings['terms_required'] ) ); ?>
+
+					<div class="afq-settings__field afq-settings__field--wide">
+						<label for="afq_terms_text">متن چک‌باکس</label>
+						<input type="text" id="afq_terms_text" name="afq_request[terms_text]"
+							value="<?php echo esc_attr( $settings['terms_text'] ); ?>" />
+					</div>
+
+					<div class="afq-settings__field afq-settings__field--wide">
+						<label for="afq_terms_url">لینک صفحه قوانین</label>
+						<input type="url" id="afq_terms_url" name="afq_request[terms_url]"
+							value="<?php echo esc_attr( $settings['terms_url'] ); ?>" dir="ltr"
+							placeholder="https://example.com/terms" />
+						<p class="description">اگر خالی بماند، متن بالا بدون لینک نمایش داده می‌شود.</p>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="afq-settings__card">
 				<h2>پیوست فایل</h2>
 				<div class="afq-settings__fields">
 
@@ -278,16 +303,19 @@ function afq_request_save_settings() {
 
 	$settings = afq_request_get_settings();
 
-	$settings['notify_enabled'] = empty( $raw['notify_enabled'] ) ? 0 : 1;
-	$settings['ack_enabled']    = empty( $raw['ack_enabled'] ) ? 0 : 1;
-	$settings['upload_enabled'] = empty( $raw['upload_enabled'] ) ? 0 : 1;
+	$settings['notify_enabled']  = empty( $raw['notify_enabled'] ) ? 0 : 1;
+	$settings['ack_enabled']     = empty( $raw['ack_enabled'] ) ? 0 : 1;
+	$settings['upload_enabled']  = empty( $raw['upload_enabled'] ) ? 0 : 1;
+	$settings['terms_enabled']   = empty( $raw['terms_enabled'] ) ? 0 : 1;
+	$settings['terms_required']  = empty( $raw['terms_required'] ) ? 0 : 1;
+	$settings['terms_url']       = isset( $raw['terms_url'] ) ? esc_url_raw( trim( (string) $raw['terms_url'] ) ) : '';
 
 	if ( isset( $raw['notify_emails'] ) ) {
 		$emails = array_filter( array_map( 'sanitize_email', array_map( 'trim', explode( ',', (string) $raw['notify_emails'] ) ) ) );
 		$settings['notify_emails'] = implode( ', ', $emails );
 	}
 
-	foreach ( array( 'notify_subject', 'ack_subject', 'success_title', 'upload_exts' ) as $key ) {
+	foreach ( array( 'notify_subject', 'ack_subject', 'success_title', 'upload_exts', 'terms_text' ) as $key ) {
 		if ( isset( $raw[ $key ] ) ) {
 			$settings[ $key ] = sanitize_text_field( $raw[ $key ] );
 		}
