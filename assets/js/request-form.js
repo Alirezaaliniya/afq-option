@@ -305,6 +305,118 @@
 	} );
 
 	/* =====================================================================
+	 * Success modal
+	 *
+	 * The modal is moved to <body> on boot: an ancestor with a transform
+	 * (common in Elementor sections) would otherwise contain position:fixed.
+	 * ================================================================== */
+
+	var lastFocused = null;
+
+	function modalOf( wrap ) {
+		if ( ! wrap ) {
+			return null;
+		}
+
+		return document.querySelector( '.afq-voc__modal[data-afq-modal-for="' + wrap.id + '"]' ) ||
+			wrap.querySelector( '.afq-voc__modal' );
+	}
+
+	function wrapOf( modal ) {
+		return document.getElementById( modal.getAttribute( 'data-afq-modal-for' ) );
+	}
+
+	function detachModal( wrap ) {
+		var modal = wrap.querySelector( '.afq-voc__modal' );
+
+		if ( modal && wrap.id && modal.parentNode !== document.body ) {
+			document.body.appendChild( modal );
+		}
+	}
+
+	function openSuccess( wrap, data ) {
+		var modal = modalOf( wrap );
+
+		if ( ! modal ) {
+			return;
+		}
+
+		modal.querySelector( '.afq-voc__success-title' ).textContent = data.title || '';
+		modal.querySelector( '.afq-voc__success-text' ).textContent = data.message || '';
+		modal.querySelector( '[data-afq-success-code]' ).textContent = data.code || '';
+
+		lastFocused = document.activeElement;
+
+		modal.classList.add( 'is-open' );
+		modal.setAttribute( 'aria-hidden', 'false' );
+		document.body.classList.add( 'afq-lock' );
+
+		var close = modal.querySelector( '.afq-voc__success-close' );
+
+		if ( close ) {
+			close.focus();
+		}
+	}
+
+	function closeSuccess( modal ) {
+		if ( ! modal || ! modal.classList.contains( 'is-open' ) ) {
+			return;
+		}
+
+		modal.classList.remove( 'is-open' );
+		modal.setAttribute( 'aria-hidden', 'true' );
+		document.body.classList.remove( 'afq-lock' );
+
+		if ( lastFocused && lastFocused.focus ) {
+			lastFocused.focus();
+		}
+
+		lastFocused = null;
+	}
+
+	/* Close button, overlay, and "submit another request". */
+	document.addEventListener( 'click', function ( e ) {
+		if ( ! e.target.closest ) {
+			return;
+		}
+
+		var hit = e.target.closest( '[data-afq-success-close], .afq-voc__again' );
+
+		if ( ! hit ) {
+			return;
+		}
+
+		var modal = hit.closest( '.afq-voc__modal' );
+
+		if ( ! modal ) {
+			return;
+		}
+
+		closeSuccess( modal );
+
+		/* "Submit another request" also returns the user to the blank form. */
+		if ( hit.classList.contains( 'afq-voc__again' ) ) {
+			var wrap = wrapOf( modal );
+
+			if ( wrap ) {
+				wrap.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+			}
+		}
+	} );
+
+	document.addEventListener( 'keydown', function ( e ) {
+		if ( 'Escape' !== e.key ) {
+			return;
+		}
+
+		var open = document.querySelector( '.afq-voc__modal.is-open' );
+
+		if ( open ) {
+			closeSuccess( open );
+		}
+	} );
+
+	/* =====================================================================
 	 * Submit
 	 * ================================================================== */
 
@@ -424,19 +536,11 @@
 			.then( function ( json ) {
 
 				if ( json && json.success ) {
-					var success = wrap.querySelector( '.afq-voc__success' );
-
-					wrap.querySelector( '.afq-voc__success-title' ).textContent = json.data.title || '';
-					wrap.querySelector( '.afq-voc__success-text' ).textContent = json.data.message || '';
-					wrap.querySelector( '[data-afq-success-code]' ).textContent = json.data.code || '';
-
 					form.reset();
 					initForm( form );
 					showFileName( form.querySelector( 'input[type="file"]' ) || document.createElement( 'input' ), '' );
 
-					form.hidden = true;
-					success.hidden = false;
-					success.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+					openSuccess( wrap, json.data || {} );
 					return;
 				}
 
@@ -473,20 +577,6 @@
 				form.classList.remove( 'is-loading' );
 				button.disabled = false;
 			} );
-	} );
-
-	/* "Submit another request" */
-	document.addEventListener( 'click', function ( e ) {
-		var again = e.target.closest ? e.target.closest( '.afq-voc__again' ) : null;
-
-		if ( ! again ) {
-			return;
-		}
-
-		var wrap = again.closest( '.afq-voc' );
-		wrap.querySelector( '.afq-voc__success' ).hidden = true;
-		wrap.querySelector( '.afq-voc__form' ).hidden = false;
-		wrap.scrollIntoView( { behavior: 'smooth', block: 'start' } );
 	} );
 
 	/* =====================================================================
@@ -586,6 +676,7 @@
 	 * ================================================================== */
 
 	function boot() {
+		document.querySelectorAll( '.afq-voc' ).forEach( detachModal );
 		document.querySelectorAll( 'form.afq-voc__form' ).forEach( initForm );
 	}
 

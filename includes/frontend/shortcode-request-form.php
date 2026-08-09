@@ -236,17 +236,28 @@ function afq_request_form_shortcode( $atts ) {
 
 		</form>
 
-		<div class="afq-voc__success" hidden>
-			<span class="afq-voc__success-icon" aria-hidden="true">
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="m5 13 4 4L19 7"/></svg>
-			</span>
-			<h3 class="afq-voc__success-title"></h3>
-			<p class="afq-voc__success-text"></p>
-			<div class="afq-voc__success-code">
-				<span>کد رهگیری شما</span>
-				<strong data-afq-success-code></strong>
+		<?php /* Shown only after a successful submit — opened by request-form.js. */ ?>
+		<div class="afq-voc__modal" role="dialog" aria-modal="true" aria-hidden="true"
+			data-afq-modal-for="afq-voc-<?php echo esc_attr( $instance ); ?>"
+			aria-labelledby="afq-voc-success-title-<?php echo esc_attr( $instance ); ?>">
+
+			<div class="afq-voc__modal-overlay" data-afq-success-close></div>
+
+			<div class="afq-voc__success">
+
+				<button type="button" class="afq-voc__success-close" data-afq-success-close aria-label="بستن">&times;</button>
+
+				<span class="afq-voc__success-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="m5 13 4 4L19 7"/></svg>
+				</span>
+				<h3 class="afq-voc__success-title" id="afq-voc-success-title-<?php echo esc_attr( $instance ); ?>"></h3>
+				<p class="afq-voc__success-text"></p>
+				<div class="afq-voc__success-code">
+					<span>کد رهگیری شما</span>
+					<strong data-afq-success-code></strong>
+				</div>
+				<button type="button" class="afq-voc__again">ثبت درخواست جدید</button>
 			</div>
-			<button type="button" class="afq-voc__again">ثبت درخواست جدید</button>
 		</div>
 
 	</div>

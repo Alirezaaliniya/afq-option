@@ -338,16 +338,84 @@ div.afq-voc div.afq-voc__message.is-error {
 	border: 1px solid #f5c6c0;
 }
 
-/* Success panel */
-div.afq-voc div.afq-voc__success {
+/* =========================================================================
+ * Success modal — hidden until request-form.js adds .is-open
+ *
+ * Scoped to .afq-voc__modal, not .afq-voc: the JS moves the modal to <body>
+ * so a transformed ancestor cannot contain its position:fixed.
+ * ====================================================================== */
+
+div.afq-voc__modal,
+div.afq-voc__modal * {
+	box-sizing: border-box;
+}
+
+div.afq-voc__modal {
+	position: fixed;
+	inset: 0;
+	z-index: 99998;
+	display: none;
+	direction: rtl;
+	text-align: right;
+}
+div.afq-voc__modal.is-open {
+	display: block;
+}
+div.afq-voc__modal div.afq-voc__modal-overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(10, 13, 18, 0.6);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+
+div.afq-voc__modal div.afq-voc__success {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: min(460px, 94vw);
+	max-height: 92vh;
+	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
 	gap: 12px;
-	padding: 30px 20px;
+	padding: 34px 26px 28px;
+	background: #fff;
+	border-radius: 16px;
+	box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+	animation: afq-voc-in 0.22s ease;
 }
-div.afq-voc span.afq-voc__success-icon {
+@keyframes afq-voc-in {
+	from { opacity: 0; transform: translate(-50%, -46%); }
+	to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+div.afq-voc__modal button.afq-voc__success-close {
+	position: absolute;
+	top: 10px;
+	left: 12px;
+	width: 32px;
+	height: 32px;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 8px !important;
+	background: transparent !important;
+	color: #8894a8 !important;
+	font-size: 24px;
+	line-height: 1 !important;
+	cursor: pointer;
+	box-shadow: none !important;
+	transition: background 0.15s ease, color 0.15s ease;
+}
+div.afq-voc__modal button.afq-voc__success-close:hover {
+	background: #f1f4f9 !important;
+	color: #16264a !important;
+}
+div.afq-voc__modal span.afq-voc__success-icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -357,24 +425,24 @@ div.afq-voc span.afq-voc__success-icon {
 	background: #e5f5ec;
 	color: #1f7a4d;
 }
-div.afq-voc span.afq-voc__success-icon svg {
+div.afq-voc__modal span.afq-voc__success-icon svg {
 	width: 30px;
 	height: 30px;
 }
-div.afq-voc h3.afq-voc__success-title {
+div.afq-voc__modal h3.afq-voc__success-title {
 	margin: 0 !important;
 	font-size: 17px;
 	font-weight: 700;
 	color: #16264a;
 }
-div.afq-voc p.afq-voc__success-text {
+div.afq-voc__modal p.afq-voc__success-text {
 	margin: 0 !important;
 	max-width: 520px;
 	font-size: 13px;
 	line-height: 2.1;
 	color: #6b7280;
 }
-div.afq-voc div.afq-voc__success-code {
+div.afq-voc__modal div.afq-voc__success-code {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -385,18 +453,18 @@ div.afq-voc div.afq-voc__success-code {
 	border-radius: 11px;
 	background: #f6f8fc;
 }
-div.afq-voc div.afq-voc__success-code span {
+div.afq-voc__modal div.afq-voc__success-code span {
 	font-size: 11.5px;
 	color: #6b7280;
 }
-div.afq-voc div.afq-voc__success-code strong {
+div.afq-voc__modal div.afq-voc__success-code strong {
 	font-size: 17px;
 	font-weight: 700;
 	color: #16264a;
 	direction: ltr;
 	letter-spacing: 0.5px;
 }
-div.afq-voc button.afq-voc__again {
+div.afq-voc__modal button.afq-voc__again {
 	margin-top: 8px !important;
 	padding: 10px 22px !important;
 	border: 1px solid #dfe4ec !important;
@@ -409,7 +477,7 @@ div.afq-voc button.afq-voc__again {
 	cursor: pointer;
 	box-shadow: none !important;
 }
-div.afq-voc button.afq-voc__again:hover {
+div.afq-voc__modal button.afq-voc__again:hover {
 	border-color: #16264a !important;
 	color: #16264a !important;
 }
@@ -424,6 +492,9 @@ div.afq-voc button.afq-voc__again:hover {
 	div.afq-voc button.afq-voc__submit {
 		width: 100%;
 		min-width: 0;
+	}
+	div.afq-voc__modal div.afq-voc__success {
+		padding: 30px 18px 24px;
 	}
 }
 
