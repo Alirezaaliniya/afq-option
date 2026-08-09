@@ -54,7 +54,14 @@ function afq_option_register_front_assets() {
 	wp_register_style( 'afq-circular-cars', $css . 'circular-cars.css', array(), $ver );
 
 	wp_register_style( 'afq-signup-form', $css . 'signup-form.css', array(), $ver );
-	wp_register_script( 'afq-signup-form', $js . 'signup-form.js', array(), $ver, true );
+
+	/*
+	 * The province/city dataset (~2700 towns) is its own file so the browser
+	 * caches it once, instead of it being re-sent inside the HTML of every
+	 * page that shows the form.
+	 */
+	wp_register_script( 'afq-iran-cities', $js . 'iran-cities.js', array(), $ver, true );
+	wp_register_script( 'afq-signup-form', $js . 'signup-form.js', array( 'afq-iran-cities' ), $ver, true );
 }
 add_action( 'wp_enqueue_scripts', 'afq_option_register_front_assets' );
 

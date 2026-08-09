@@ -39,7 +39,6 @@ function afq_signup_form_shortcode( $atts ) {
 		array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'afq_signup_submit' ),
-			'cities'  => afq_signup_get_cities(),
 			'i18n'    => array(
 				'chooseProvince' => 'ابتدا استان را انتخاب کنید',
 				'chooseCity'     => 'شهر را انتخاب کنید',

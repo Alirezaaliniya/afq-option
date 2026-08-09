@@ -57,7 +57,6 @@ final class AFQ_Option {
 		$path = AFQ_OPTION_PATH . 'includes/';
 
 		/* ---- Shared: needed on every request type. ---- */
-		require_once $path . 'data-cities.php';
 		require_once $path . 'config.php';
 		require_once $path . 'helpers.php';
 		require_once $path . 'post-types.php';

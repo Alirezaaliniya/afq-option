@@ -340,12 +340,20 @@ function afq_signup_get_statuses() {
 /**
  * Iran provinces list.
  *
- * Derived from the city map keys so the two can never drift apart.
+ * These strings are also the keys of window.afqIranCities in
+ * assets/js/iran-cities.js, which fills the dependent city selects — they
+ * must stay byte-identical on both sides.
  *
  * @return string[]
  */
 function afq_signup_get_provinces() {
-	return array_keys( afq_signup_get_cities() );
+	return array(
+		'آذربایجان شرقی', 'آذربایجان غربی', 'اردبیل', 'اصفهان', 'البرز', 'ایلام',
+		'بوشهر', 'تهران', 'چهارمحال و بختیاری', 'خراسان جنوبی', 'خراسان رضوی', 'خراسان شمالی',
+		'خوزستان', 'زنجان', 'سمنان', 'سیستان و بلوچستان', 'فارس', 'قزوین', 'قم',
+		'کردستان', 'کرمان', 'کرمانشاه', 'کهگیلویه و بویراحمد', 'گلستان', 'گیلان',
+		'لرستان', 'مازندران', 'مرکزی', 'هرمزگان', 'همدان', 'یزد',
+	);
 }
 
 /**

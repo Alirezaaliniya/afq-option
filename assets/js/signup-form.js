@@ -3,7 +3,7 @@
 
 	var CFG    = window.afqSignupCfg || {};
 	var I18N   = CFG.i18n || {};
-	var CITIES = CFG.cities || {};
+	var CITIES = window.afqIranCities || {};
 
 	var OTHER_VALUE = '__other__';
 
