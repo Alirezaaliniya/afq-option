@@ -78,6 +78,7 @@ final class AFQ_Option {
 		require_once $path . 'frontend/shortcode-signup-form.php';
 		require_once $path . 'frontend/shortcode-request-form.php';
 		require_once $path . 'frontend/shortcode-request-track.php';
+		require_once $path . 'frontend/shortcode-flipbook.php';
 
 		/* ---- Admin only: meta boxes, list tables, admin assets. ---- */
 		if ( is_admin() ) {

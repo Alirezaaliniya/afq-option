@@ -1,0 +1,477 @@
+/**
+ * [afq_flipbook] — PDF rendered as a page-turning book.
+ *
+ * Selectors are scoped and high-specificity so theme/Elementor kits do not
+ * override the stage, buttons and canvases.
+ */
+
+div.afq-book,
+div.afq-book * {
+	box-sizing: border-box;
+}
+
+div.afq-book {
+	--afq-book-h: 78vh;
+	--afq-book-paper: #fff;
+	--afq-book-ink: #16264a;
+	--afq-book-line: #e8ecf3;
+
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-width: 100%;
+	margin: 0 auto;
+	padding: 16px;
+	border: 1px solid var(--afq-book-line);
+	border-radius: 14px;
+	background: #f7f8fb;
+	box-shadow: 0 6px 24px rgba(15, 33, 64, 0.06);
+	overflow: hidden;
+}
+
+div.afq-book__notice {
+	padding: 12px 16px;
+	border: 1px dashed #dc2626;
+	border-radius: 10px;
+	background: #fdecea;
+	color: #a04a41;
+	font-size: 13px;
+}
+
+/* =========================================================================
+ * Top bar
+ * ====================================================================== */
+
+div.afq-book div.afq-book__bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	min-height: 34px;
+}
+div.afq-book span.afq-book__title {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--afq-book-ink);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+div.afq-book div.afq-book__tools {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+}
+div.afq-book .afq-book__tool {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 1px solid var(--afq-book-line) !important;
+	border-radius: 9px !important;
+	background: #fff !important;
+	color: #6b7280 !important;
+	cursor: pointer;
+	box-shadow: none !important;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+div.afq-book .afq-book__tool:hover {
+	color: var(--afq-book-ink) !important;
+	border-color: var(--afq-book-ink) !important;
+}
+div.afq-book .afq-book__tool svg {
+	width: 17px;
+	height: 17px;
+	display: block;
+}
+
+/* =========================================================================
+ * Stage
+ * ====================================================================== */
+
+div.afq-book div.afq-book__stage {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 160px;
+}
+
+div.afq-book div.afq-book__viewport {
+	position: relative;
+	width: 100%;
+	height: 0;
+	margin: 0 auto;
+	perspective: 2400px;
+	transform-style: preserve-3d;
+	transition: width 0.2s ease, height 0.2s ease;
+}
+
+/* The two static halves. In spread mode each takes half the width; "a" is the
+ * half pages flip away from (right in LTR, left in RTL). */
+div.afq-book div.afq-book__sheet {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 50%;
+	background: var(--afq-book-paper);
+	overflow: hidden;
+	backface-visibility: hidden;
+}
+div.afq-book--ltr div.afq-book__sheet--b { left: 0; }
+div.afq-book--ltr div.afq-book__sheet--a { right: 0; }
+div.afq-book--rtl div.afq-book__sheet--b { right: 0; }
+div.afq-book--rtl div.afq-book__sheet--a { left: 0; }
+
+div.afq-book.is-single div.afq-book__sheet {
+	width: 100%;
+	left: 0;
+	right: 0;
+}
+div.afq-book.is-single div.afq-book__sheet--a {
+	display: none;
+}
+
+div.afq-book div.afq-book__sheet canvas,
+div.afq-book div.afq-book__face canvas {
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	max-width: none !important;
+	margin: 0 !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+/* Empty half (inside of the cover). */
+div.afq-book div.afq-book__sheet.is-blank {
+	background: linear-gradient(180deg, #eef1f6, #e4e8f0);
+}
+
+/* Book shadows: spine gutter + outer edges. */
+div.afq-book div.afq-book__spine {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 46px;
+	height: 100%;
+	transform: translateX(-50%);
+	pointer-events: none;
+	background: linear-gradient(
+		90deg,
+		rgba(0, 0, 0, 0) 0%,
+		rgba(0, 0, 0, 0.13) 45%,
+		rgba(0, 0, 0, 0.19) 50%,
+		rgba(0, 0, 0, 0.13) 55%,
+		rgba(0, 0, 0, 0) 100%
+	);
+}
+div.afq-book.is-single div.afq-book__spine {
+	display: none;
+}
+
+div.afq-book div.afq-book__viewport::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	box-shadow: 0 18px 44px rgba(15, 33, 64, 0.22);
+}
+
+/* =========================================================================
+ * Flipping leaf
+ * ====================================================================== */
+
+div.afq-book div.afq-book__leaf {
+	position: absolute;
+	top: 0;
+	width: 50%;
+	height: 100%;
+	transform-style: preserve-3d;
+	visibility: hidden;
+	z-index: 5;
+	will-change: transform;
+}
+div.afq-book--ltr div.afq-book__leaf {
+	right: 0;
+	transform-origin: left center;
+}
+div.afq-book--rtl div.afq-book__leaf {
+	left: 0;
+	transform-origin: right center;
+}
+div.afq-book.is-single div.afq-book__leaf {
+	width: 100%;
+}
+div.afq-book.is-single.afq-book--ltr div.afq-book__leaf {
+	transform-origin: left center;
+}
+div.afq-book.is-single.afq-book--rtl div.afq-book__leaf {
+	transform-origin: right center;
+}
+
+div.afq-book.is-flipping div.afq-book__leaf {
+	visibility: visible;
+}
+div.afq-book.is-animating div.afq-book__leaf {
+	transition: transform 0.62s cubic-bezier(0.42, 0.05, 0.28, 1);
+}
+
+div.afq-book div.afq-book__face {
+	position: absolute;
+	inset: 0;
+	background: var(--afq-book-paper);
+	overflow: hidden;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+}
+div.afq-book div.afq-book__face--back {
+	transform: rotateY(180deg);
+}
+
+/* Shading that follows the leaf, so the turn reads as paper, not a flat card. */
+div.afq-book div.afq-book__face::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.62s ease;
+	background: linear-gradient(90deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0));
+}
+div.afq-book--rtl div.afq-book__face::after {
+	background: linear-gradient(270deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0));
+}
+div.afq-book.is-animating div.afq-book__face--front::after {
+	opacity: 1;
+}
+div.afq-book.is-animating div.afq-book__face--back::after {
+	opacity: 0.55;
+}
+
+/* =========================================================================
+ * Navigation arrows
+ * ====================================================================== */
+
+div.afq-book button.afq-book__nav {
+	position: absolute;
+	top: 50%;
+	z-index: 8;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 42px;
+	height: 42px;
+	margin: 0 !important;
+	padding: 0 !important;
+	transform: translateY(-50%);
+	border: none !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, 0.94) !important;
+	color: var(--afq-book-ink) !important;
+	cursor: pointer;
+	box-shadow: 0 6px 18px rgba(15, 33, 64, 0.2) !important;
+	transition: opacity 0.15s ease, transform 0.15s ease;
+}
+div.afq-book button.afq-book__nav svg {
+	width: 20px;
+	height: 20px;
+	display: block;
+}
+div.afq-book button.afq-book__nav--prev {
+	inset-inline-start: 2px;
+}
+div.afq-book button.afq-book__nav--next {
+	inset-inline-end: 2px;
+}
+div.afq-book button.afq-book__nav:hover {
+	transform: translateY(-50%) scale(1.07);
+}
+div.afq-book button.afq-book__nav:disabled {
+	opacity: 0.3;
+	cursor: default;
+	transform: translateY(-50%);
+}
+
+/* =========================================================================
+ * Loading / error overlay
+ * ====================================================================== */
+
+div.afq-book div.afq-book__status {
+	position: absolute;
+	inset: 0;
+	z-index: 12;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	background: rgba(247, 248, 251, 0.94);
+	font-size: 13px;
+	color: #6b7280;
+	text-align: center;
+	padding: 20px;
+}
+div.afq-book.is-ready div.afq-book__status {
+	display: none;
+}
+div.afq-book.has-error div.afq-book__status {
+	display: flex;
+	color: #a04a41;
+}
+div.afq-book.has-error span.afq-book__spinner {
+	display: none;
+}
+div.afq-book span.afq-book__spinner {
+	width: 30px;
+	height: 30px;
+	border: 3px solid #dfe4ec;
+	border-top-color: var(--afq-book-ink);
+	border-radius: 50%;
+	animation: afq-book-spin 0.8s linear infinite;
+}
+@keyframes afq-book-spin {
+	to { transform: rotate(360deg); }
+}
+
+/* =========================================================================
+ * Footer
+ * ====================================================================== */
+
+div.afq-book div.afq-book__footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+div.afq-book button.afq-book__step {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 1px solid var(--afq-book-line) !important;
+	border-radius: 9px !important;
+	background: #fff !important;
+	color: #6b7280 !important;
+	cursor: pointer;
+	box-shadow: none !important;
+}
+div.afq-book button.afq-book__step:hover:not(:disabled) {
+	color: var(--afq-book-ink) !important;
+	border-color: var(--afq-book-ink) !important;
+}
+div.afq-book button.afq-book__step:disabled {
+	opacity: 0.35;
+	cursor: default;
+}
+div.afq-book button.afq-book__step svg {
+	width: 16px;
+	height: 16px;
+	display: block;
+}
+
+div.afq-book div.afq-book__counter {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 12px;
+	border: 1px solid var(--afq-book-line);
+	border-radius: 9px;
+	background: #fff;
+	font-size: 12.5px;
+	color: #6b7280;
+}
+div.afq-book input.afq-book__page-input {
+	width: 46px !important;
+	height: auto !important;
+	margin: 0 !important;
+	padding: 2px 4px !important;
+	border: none !important;
+	border-bottom: 1px solid var(--afq-book-line) !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	font-family: inherit !important;
+	font-size: 13px !important;
+	font-weight: 700;
+	color: var(--afq-book-ink) !important;
+	text-align: center;
+	box-shadow: none !important;
+}
+div.afq-book input.afq-book__page-input:focus {
+	outline: none !important;
+	border-bottom-color: var(--afq-book-ink) !important;
+}
+div.afq-book div.afq-book__counter b {
+	font-weight: 700;
+	color: var(--afq-book-ink);
+}
+
+/* =========================================================================
+ * Fullscreen
+ * ====================================================================== */
+
+div.afq-book:fullscreen {
+	max-width: none;
+	height: 100%;
+	border-radius: 0;
+	padding: 18px;
+	background: #0f1420;
+	--afq-book-line: #2a3346;
+	--afq-book-ink: #f3f5f9;
+}
+div.afq-book:fullscreen span.afq-book__title {
+	color: #f3f5f9;
+}
+div.afq-book:fullscreen div.afq-book__status {
+	background: rgba(15, 20, 32, 0.94);
+}
+div.afq-book:fullscreen .afq-book__tool,
+div.afq-book:fullscreen button.afq-book__step,
+div.afq-book:fullscreen div.afq-book__counter {
+	background: #192031 !important;
+	border-color: #2a3346 !important;
+	color: #c7cddb !important;
+}
+div.afq-book:fullscreen div.afq-book__stage {
+	flex: 1;
+}
+
+/* =========================================================================
+ * Small screens
+ * ====================================================================== */
+
+@media (max-width: 640px) {
+	div.afq-book {
+		padding: 12px;
+		gap: 10px;
+	}
+	div.afq-book button.afq-book__nav {
+		width: 36px;
+		height: 36px;
+	}
+	div.afq-book button.afq-book__nav svg {
+		width: 17px;
+		height: 17px;
+	}
+	div.afq-book span.afq-book__title {
+		font-size: 13px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	div.afq-book.is-animating div.afq-book__leaf {
+		transition-duration: 0.01s;
+	}
+	div.afq-book div.afq-book__face::after {
+		transition-duration: 0.01s;
+	}
+}

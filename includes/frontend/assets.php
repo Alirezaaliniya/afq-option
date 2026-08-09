@@ -26,6 +26,7 @@ function afq_option_shortcode_handles() {
 		'afq_signup_form'   => 'afq-signup-form',
 		'afq_request_form'  => 'afq-request-form',
 		'afq_request_track' => 'afq-request-form',
+		'afq_flipbook'      => 'afq-flipbook',
 	);
 }
 
@@ -69,6 +70,15 @@ function afq_option_register_front_assets() {
 
 	wp_register_style( 'afq-request-form', $css . 'request-form.css', array( 'afq-jalali-picker' ), $ver );
 	wp_register_script( 'afq-request-form', $js . 'request-form.js', array( 'afq-iran-cities', 'afq-jalali-picker' ), $ver, true );
+
+	/*
+	 * PDF.js is bundled rather than loaded from a CDN: it is ~320 KB and the
+	 * 1 MB worker only downloads on pages that actually contain a flipbook.
+	 */
+	wp_register_script( 'afq-pdfjs', AFQ_OPTION_URL . 'assets/vendor/pdfjs/pdf.min.js', array(), AFQ_PDFJS_VERSION, true );
+
+	wp_register_style( 'afq-flipbook', $css . 'flipbook.css', array(), $ver );
+	wp_register_script( 'afq-flipbook', $js . 'flipbook.js', array( 'afq-pdfjs' ), $ver, true );
 }
 add_action( 'wp_enqueue_scripts', 'afq_option_register_front_assets' );
 
@@ -114,6 +124,39 @@ function afq_request_enqueue_assets() {
 				'badFormat'      => 'فرمت این فایل مجاز نیست.',
 				'minChars'       => 'حداقل %d کاراکتر لازم است.',
 				'genericError'   => 'خطا در ارسال. دوباره تلاش کنید.',
+			),
+		)
+	);
+}
+
+/**
+ * Enqueue and configure the flipbook assets (once per page).
+ */
+function afq_flipbook_enqueue_assets() {
+
+	static $done = false;
+
+	wp_enqueue_style( 'afq-flipbook' );
+	wp_enqueue_script( 'afq-flipbook' );
+
+	if ( $done ) {
+		return;
+	}
+
+	$done   = true;
+	$vendor = AFQ_OPTION_URL . 'assets/vendor/pdfjs/';
+
+	wp_localize_script(
+		'afq-flipbook',
+		'afqFlipbookCfg',
+		array(
+			'worker' => $vendor . 'pdf.worker.min.js',
+			'fonts'  => $vendor . 'standard_fonts/',
+			'i18n'   => array(
+				'loading'   => 'در حال بارگذاری کتاب…',
+				'loadError' => 'بارگذاری فایل PDF ممکن نشد. آدرس فایل را بررسی کنید.',
+				'libError'  => 'کتابخانه نمایش PDF بارگذاری نشد.',
+				'locked'    => 'این فایل PDF رمز دارد و قابل نمایش نیست.',
 			),
 		)
 	);
