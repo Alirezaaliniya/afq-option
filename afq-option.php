@@ -28,6 +28,8 @@
  *   [afq_voice_grid]         صدای مشتریان (count, columns)
  *   [afq_circular_cars]      خودروهای بخش‌نامه (id)
  *   [afq_signup_form]        فرم ثبت‌نام (types, type)
+ *   [afq_request_form]     فرم صدای مشتری
+ *   [afq_request_track]    فرم پیگیری
  *
  * کوئری‌های المنتور (Query ID):
  *   afq_circular_sold        بخش‌نامه‌های اتمام فروش
