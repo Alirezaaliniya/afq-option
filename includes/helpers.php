@@ -195,6 +195,157 @@ function afq_voice_is_video_file( $url ) {
 }
 
 /* -------------------------------------------------------------------------
+ * Jalali (Shamsi) Calendar
+ *
+ * Port of the Khayyam/Birashk algorithm used by jalaali-js, so the PHP
+ * validation and the JS date picker agree on month lengths and leap years.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Integer division truncating toward zero.
+ *
+ * @param int $a Dividend.
+ * @param int $b Divisor.
+ * @return int
+ */
+function afq_jalali_div( $a, $b ) {
+	return intdiv( (int) $a, (int) $b );
+}
+
+/**
+ * Remainder matching the truncated division above.
+ *
+ * @param int $a Dividend.
+ * @param int $b Divisor.
+ * @return int
+ */
+function afq_jalali_mod( $a, $b ) {
+	return (int) $a - intdiv( (int) $a, (int) $b ) * (int) $b;
+}
+
+/**
+ * Calendar data for a Jalali year: leap offset, Gregorian year and the
+ * March day on which Farvardin 1 falls.
+ *
+ * @param int $jy Jalali year.
+ * @return array|null Null when the year is outside the supported range.
+ */
+function afq_jalali_cal( $jy ) {
+
+	$jy = (int) $jy;
+
+	$breaks = array( -61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 1701, 1866, 2020, 2053, 2400, 3178 );
+	$bl     = count( $breaks );
+	$gy     = $jy + 621;
+	$leap_j = -14;
+	$jp     = $breaks[0];
+	$jump   = 0;
+
+	if ( $jy < $jp || $jy >= $breaks[ $bl - 1 ] ) {
+		return null;
+	}
+
+	for ( $i = 1; $i < $bl; $i++ ) {
+		$jm   = $breaks[ $i ];
+		$jump = $jm - $jp;
+
+		if ( $jy < $jm ) {
+			break;
+		}
+
+		$leap_j = $leap_j + afq_jalali_div( $jump, 33 ) * 8 + afq_jalali_div( afq_jalali_mod( $jump, 33 ), 4 );
+		$jp     = $jm;
+	}
+
+	$n      = $jy - $jp;
+	$leap_j = $leap_j + afq_jalali_div( $n, 33 ) * 8 + afq_jalali_div( afq_jalali_mod( $n, 33 ) + 3, 4 );
+
+	if ( 4 === afq_jalali_mod( $jump, 33 ) && 4 === $jump - $n ) {
+		$leap_j++;
+	}
+
+	$leap_g = afq_jalali_div( $gy, 4 ) - afq_jalali_div( ( afq_jalali_div( $gy, 100 ) + 1 ) * 3, 4 ) - 150;
+	$march  = 20 + $leap_j - $leap_g;
+
+	if ( $jump - $n < 6 ) {
+		$n = $n - $jump + afq_jalali_div( $jump + 4, 33 ) * 33;
+	}
+
+	$leap = afq_jalali_mod( afq_jalali_mod( $n + 1, 33 ) - 1, 4 );
+
+	if ( -1 === $leap ) {
+		$leap = 4;
+	}
+
+	return array(
+		'leap'  => $leap,
+		'gy'    => $gy,
+		'march' => $march,
+	);
+}
+
+/**
+ * Whether a Jalali year is a leap year (Esfand has 30 days).
+ *
+ * @param int $jy Jalali year.
+ * @return bool
+ */
+function afq_jalali_is_leap_year( $jy ) {
+
+	$cal = afq_jalali_cal( $jy );
+
+	return $cal && 0 === $cal['leap'];
+}
+
+/**
+ * Number of days in a Jalali month.
+ *
+ * @param int $jy Jalali year.
+ * @param int $jm Jalali month (1-12).
+ * @return int
+ */
+function afq_jalali_month_length( $jy, $jm ) {
+
+	$jm = (int) $jm;
+
+	if ( $jm <= 6 ) {
+		return 31;
+	}
+
+	if ( $jm <= 11 ) {
+		return 30;
+	}
+
+	return afq_jalali_is_leap_year( $jy ) ? 30 : 29;
+}
+
+/**
+ * Validate a Jalali date string in YYYY/MM/DD form.
+ *
+ * Unlike a plain regex this rejects impossible days such as 1370/12/30
+ * (Esfand had 29 days that year) or 1400/07/31.
+ *
+ * @param string $value Date string.
+ * @return bool
+ */
+function afq_signup_is_valid_jalali_date( $value ) {
+
+	if ( ! preg_match( '#^(1[34]\d{2})/(\d{2})/(\d{2})$#', (string) $value, $m ) ) {
+		return false;
+	}
+
+	$jy = (int) $m[1];
+	$jm = (int) $m[2];
+	$jd = (int) $m[3];
+
+	if ( $jm < 1 || $jm > 12 || $jd < 1 ) {
+		return false;
+	}
+
+	return $jd <= afq_jalali_month_length( $jy, $jm );
+}
+
+/* -------------------------------------------------------------------------
  * Signup — Validation
  * ---------------------------------------------------------------------- */
 
@@ -291,8 +442,11 @@ function afq_signup_validate_value( $rule, $value ) {
 			break;
 
 		case 'jalali_date':
-			if ( ! preg_match( '/^1[34]\d{2}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])$/', $value ) ) {
+			if ( ! preg_match( '#^1[34]\d{2}/\d{2}/\d{2}$#', $value ) ) {
 				return 'تاریخ را به صورت 1370/01/01 وارد کنید.';
+			}
+			if ( ! afq_signup_is_valid_jalali_date( $value ) ) {
+				return 'این تاریخ در تقویم شمسی وجود ندارد.';
 			}
 			break;
 	}

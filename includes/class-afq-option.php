@@ -57,6 +57,7 @@ final class AFQ_Option {
 		$path = AFQ_OPTION_PATH . 'includes/';
 
 		/* ---- Shared: needed on every request type. ---- */
+		require_once $path . 'data-cities.php';
 		require_once $path . 'config.php';
 		require_once $path . 'helpers.php';
 		require_once $path . 'post-types.php';
@@ -85,6 +86,7 @@ final class AFQ_Option {
 			require_once $path . 'admin/metabox-voice.php';
 			require_once $path . 'admin/metabox-circular.php';
 			require_once $path . 'admin/metabox-signup.php';
+			require_once $path . 'admin/settings-signup.php';
 			require_once $path . 'admin/taxonomy-fields.php';
 		}
 	}

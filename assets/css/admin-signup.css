@@ -11,3 +11,158 @@
 .afq-signup-admin__row { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
 .afq-signup-admin__row span { color: #8b95a3; font-size: 12px; flex-shrink: 0; min-width: 110px; }
 .afq-signup-admin__row strong { color: #1f2937; font-weight: 600; overflow-wrap: anywhere; }
+
+/* -------------------------------------------------------------------------
+ * Settings screen (required / optional per field)
+ * ---------------------------------------------------------------------- */
+
+.afq-signup-settings__intro {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	padding: 18px 20px;
+	margin: 16px 0;
+	border-radius: 14px;
+	background: linear-gradient(135deg, #14181f 0%, #232a36 60%, #2c3442 100%);
+	color: #fff;
+	box-shadow: 0 10px 30px rgba(15, 20, 30, 0.08);
+}
+.afq-signup-settings__intro .dashicons {
+	width: 42px;
+	height: 42px;
+	font-size: 24px;
+	line-height: 42px;
+	text-align: center;
+	border-radius: 12px;
+	background: linear-gradient(135deg, #d8b46a, #b8934a);
+	color: #14181f;
+	flex-shrink: 0;
+}
+.afq-signup-settings__intro strong {
+	display: block;
+	font-size: 14px;
+	color: #e8cf9a;
+}
+.afq-signup-settings__intro p {
+	margin: 6px 0 0;
+	font-size: 12.5px;
+	line-height: 2;
+	color: rgba(255, 255, 255, 0.75);
+	max-width: 900px;
+}
+.afq-signup-settings__intro p strong {
+	display: inline;
+	color: #fff;
+}
+
+.afq-signup-settings__bulk {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 14px;
+}
+.afq-signup-settings__bulk .button {
+	border-radius: 8px;
+}
+
+.afq-signup-settings__card {
+	background: #fff;
+	border: 1px solid #eef0f3;
+	border-radius: 12px;
+	padding: 6px 16px 16px;
+	margin-bottom: 14px;
+	box-shadow: 0 2px 8px rgba(15, 20, 30, 0.04);
+}
+.afq-signup-settings__card h2 {
+	font-size: 13px;
+	color: #b8934a;
+	margin: 14px 0 12px;
+	padding: 0;
+}
+.afq-signup-settings__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 8px 20px;
+}
+.afq-signup-settings__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 9px 12px;
+	border: 1px solid #f0f2f5;
+	border-radius: 10px;
+	background: #fbfbfc;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+.afq-signup-settings__row:hover {
+	border-color: #d8b46a;
+	background: #fff;
+}
+.afq-signup-settings__name {
+	font-size: 13px;
+	color: #1f2937;
+	min-width: 0;
+}
+.afq-signup-settings__name code {
+	display: block;
+	margin-top: 2px;
+	padding: 0;
+	background: none;
+	font-size: 10.5px;
+	color: #9ca3af;
+	direction: ltr;
+	text-align: right;
+}
+
+/* Switch */
+.afq-signup-settings__switch {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+}
+.afq-signup-settings__switch input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+	margin: 0;
+}
+.afq-signup-settings__slider {
+	position: relative;
+	display: block;
+	width: 44px;
+	height: 24px;
+	border-radius: 999px;
+	background: #d5d9e0;
+	transition: background 0.2s ease;
+	flex-shrink: 0;
+}
+.afq-signup-settings__slider::before {
+	content: "";
+	position: absolute;
+	top: 3px;
+	inset-inline-start: 3px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+	transition: transform 0.2s ease;
+}
+.afq-signup-settings__switch input:checked + .afq-signup-settings__slider {
+	background: linear-gradient(135deg, #d8b46a, #b8934a);
+}
+.afq-signup-settings__switch input:checked + .afq-signup-settings__slider::before {
+	transform: translateX(-20px);
+}
+.afq-signup-settings__switch input:focus-visible + .afq-signup-settings__slider {
+	box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.3);
+}
+.afq-signup-settings__state {
+	font-size: 11.5px;
+	font-weight: 600;
+	color: #6b7280;
+	min-width: 42px;
+}

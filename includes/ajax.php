@@ -190,13 +190,32 @@ function afq_signup_ajax_submit() {
 		$value = ( 'textarea' === $field['type'] ) ? sanitize_textarea_field( $raw ) : sanitize_text_field( $raw );
 		$value = trim( $value );
 
+		/*
+		 * Optional fields are simply skipped when left blank: no error, and
+		 * no meta row is written for them.
+		 */
 		if ( '' === $value ) {
-			$errors[ $key ] = 'این فیلد ضروری است.';
+
+			/*
+			 * A city can only be filled once its province is chosen, so a
+			 * required city stays silent while its province is still empty —
+			 * the province is what the visitor needs to fix first. Province
+			 * fields always precede their city in the section order.
+			 */
+			$waiting_on_province = ! empty( $field['city_of'] ) && empty( $data[ $field['city_of'] ] );
+
+			if ( ! empty( $field['required'] ) && ! $waiting_on_province ) {
+				$errors[ $key ] = 'این فیلد ضروری است.';
+			}
 			continue;
 		}
 
-		/* Selects: value must be one of the defined options. */
-		if ( 'select' === $field['type'] && ! in_array( $value, $field['options'], true ) ) {
+		/*
+		 * Selects: value must be one of the defined options. Dependent city
+		 * fields are excluded — the form offers a «سایر» option so any town
+		 * name is acceptable there.
+		 */
+		if ( empty( $field['city_of'] ) && 'select' === $field['type'] && ! in_array( $value, $field['options'], true ) ) {
 			$errors[ $key ] = 'گزینه انتخاب‌شده معتبر نیست.';
 			continue;
 		}
@@ -225,12 +244,30 @@ function afq_signup_ajax_submit() {
 	$signup_type = isset( $_POST['signup_type'] ) ? sanitize_text_field( wp_unslash( $_POST['signup_type'] ) ) : '';
 	$signup_type = trim( $signup_type );
 
-	if ( '' === $signup_type || mb_strlen( $signup_type ) > 100 ) {
-		$errors['signup_type'] = 'نوع ثبت‌نام را انتخاب کنید.';
+	if ( '' === $signup_type ) {
+		if ( afq_signup_is_field_required( 'signup_type' ) ) {
+			$errors['signup_type'] = 'نوع ثبت‌نام را انتخاب کنید.';
+		}
+	} elseif ( mb_strlen( $signup_type ) > 100 ) {
+		$errors['signup_type'] = 'نوع ثبت‌نام معتبر نیست.';
 	}
 
 	if ( $errors ) {
 		wp_send_json_error( array( 'errors' => $errors ) );
+	}
+
+	/*
+	 * Build the submission title from whatever identity fields were filled
+	 * in — any of them may now be optional.
+	 */
+	$title = trim( ( $data['first_name'] ?? '' ) . ' ' . ( $data['last_name'] ?? '' ) );
+
+	if ( ! empty( $data['national_id'] ) ) {
+		$title = '' !== $title ? $title . ' — ' . $data['national_id'] : $data['national_id'];
+	}
+
+	if ( '' === $title ) {
+		$title = 'ثبت‌نام جدید';
 	}
 
 	/* Create submission post. */
@@ -238,7 +275,7 @@ function afq_signup_ajax_submit() {
 		array(
 			'post_type'   => 'afq_signup',
 			'post_status' => 'publish',
-			'post_title'  => $data['first_name'] . ' ' . $data['last_name'] . ' — ' . $data['national_id'],
+			'post_title'  => $title,
 		),
 		true
 	);
@@ -251,7 +288,10 @@ function afq_signup_ajax_submit() {
 		update_post_meta( $post_id, '_afq_signup_' . $key, $value );
 	}
 
-	update_post_meta( $post_id, '_afq_signup_signup_type', $signup_type );
+	if ( '' !== $signup_type ) {
+		update_post_meta( $post_id, '_afq_signup_signup_type', $signup_type );
+	}
+
 	update_post_meta( $post_id, '_afq_signup_status', 'pending' );
 
 	afq_signup_send_notification( $post_id, $data, $signup_type );
@@ -283,7 +323,13 @@ function afq_signup_send_notification( $post_id, $data, $signup_type ) {
 		return;
 	}
 
-	$subject = 'ثبت‌نام جدید: ' . $data['first_name'] . ' ' . $data['last_name'] . ' (' . $signup_type . ')';
+	$who = trim( ( $data['first_name'] ?? '' ) . ' ' . ( $data['last_name'] ?? '' ) );
+
+	if ( '' === $who ) {
+		$who = $data['national_id'] ?? $data['mobile'] ?? 'بدون نام';
+	}
+
+	$subject = 'ثبت‌نام جدید: ' . $who . ( '' !== $signup_type ? ' (' . $signup_type . ')' : '' );
 
 	$rows = '<tr><td style="padding:8px 12px;border:1px solid #e3e6ea;background:#f5f6f8;font-weight:bold;">نوع ثبت‌نام</td><td style="padding:8px 12px;border:1px solid #e3e6ea;">' . esc_html( $signup_type ) . '</td></tr>';
 

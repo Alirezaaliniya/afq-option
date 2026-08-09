@@ -340,16 +340,42 @@ function afq_signup_get_statuses() {
 /**
  * Iran provinces list.
  *
+ * Derived from the city map keys so the two can never drift apart.
+ *
  * @return string[]
  */
 function afq_signup_get_provinces() {
-	return array(
-		'آذربایجان شرقی', 'آذربایجان غربی', 'اردبیل', 'اصفهان', 'البرز', 'ایلام',
-		'بوشهر', 'تهران', 'چهارمحال و بختیاری', 'خراسان جنوبی', 'خراسان رضوی', 'خراسان شمالی',
-		'خوزستان', 'زنجان', 'سمنان', 'سیستان و بلوچستان', 'فارس', 'قزوین', 'قم',
-		'کردستان', 'کرمان', 'کرمانشاه', 'کهگیلویه و بویراحمد', 'گلستان', 'گیلان',
-		'لرستان', 'مازندران', 'مرکزی', 'هرمزگان', 'همدان', 'یزد',
-	);
+	return array_keys( afq_signup_get_cities() );
+}
+
+/**
+ * Option name holding the field keys the admin marked as optional.
+ */
+const AFQ_SIGNUP_OPTIONAL_OPTION = 'afq_signup_optional_fields';
+
+/**
+ * Field keys currently marked optional in the settings screen.
+ *
+ * Default is an empty list — i.e. every field is required, matching the
+ * behaviour the form had before the setting existed.
+ *
+ * @return string[]
+ */
+function afq_signup_get_optional_fields() {
+
+	$optional = get_option( AFQ_SIGNUP_OPTIONAL_OPTION, array() );
+
+	return is_array( $optional ) ? array_values( array_filter( array_map( 'strval', $optional ) ) ) : array();
+}
+
+/**
+ * Whether a signup field must be filled in.
+ *
+ * @param string $key Field key.
+ * @return bool
+ */
+function afq_signup_is_field_required( $key ) {
+	return ! in_array( (string) $key, afq_signup_get_optional_fields(), true );
 }
 
 /**
@@ -434,8 +460,9 @@ function afq_signup_get_sections() {
 					'options' => $provinces,
 				),
 				'birth_city'     => array(
-					'label' => 'شهر محل تولد',
-					'type'  => 'text',
+					'label'   => 'شهر محل تولد',
+					'type'    => 'text',
+					'city_of' => 'birth_province',
 				),
 				'issue_province' => array(
 					'label'   => 'استان محل صدور',
@@ -443,8 +470,9 @@ function afq_signup_get_sections() {
 					'options' => $provinces,
 				),
 				'issue_city'     => array(
-					'label' => 'شهر محل صدور',
-					'type'  => 'text',
+					'label'   => 'شهر محل صدور',
+					'type'    => 'text',
+					'city_of' => 'issue_province',
 				),
 				'birth_date'     => array(
 					'label'       => 'تاریخ تولد',
@@ -471,8 +499,9 @@ function afq_signup_get_sections() {
 					'options' => $provinces,
 				),
 				'home_city'     => array(
-					'label' => 'شهر محل سکونت',
-					'type'  => 'text',
+					'label'   => 'شهر محل سکونت',
+					'type'    => 'text',
+					'city_of' => 'home_province',
 				),
 				'main_street'   => array(
 					'label' => 'خیابان اصلی',
@@ -545,8 +574,9 @@ function afq_signup_get_sections() {
 					'options' => $provinces,
 				),
 				'work_city'        => array(
-					'label' => 'شهر محل کار',
-					'type'  => 'text',
+					'label'   => 'شهر محل کار',
+					'type'    => 'text',
+					'city_of' => 'work_province',
 				),
 				'work_phone'       => array(
 					'label'    => 'تلفن محل کار',
@@ -580,6 +610,15 @@ function afq_signup_get_sections() {
 			),
 		),
 	);
+
+	/* Merge the admin's required/optional choice into every field. */
+	$optional = afq_signup_get_optional_fields();
+
+	foreach ( $sections as $section_id => $section ) {
+		foreach ( $section['fields'] as $key => $field ) {
+			$sections[ $section_id ]['fields'][ $key ]['required'] = ! in_array( (string) $key, $optional, true );
+		}
+	}
 
 	return $sections;
 }

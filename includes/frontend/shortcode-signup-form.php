@@ -39,6 +39,18 @@ function afq_signup_form_shortcode( $atts ) {
 		array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'afq_signup_submit' ),
+			'cities'  => afq_signup_get_cities(),
+			'i18n'    => array(
+				'chooseProvince' => 'ابتدا استان را انتخاب کنید',
+				'chooseCity'     => 'شهر را انتخاب کنید',
+				'otherCity'      => 'سایر (وارد کردن دستی)',
+				'cityPlaceholder' => 'نام شهر را وارد کنید',
+				'required'       => 'این فیلد ضروری است.',
+				'today'          => 'امروز',
+				'clear'          => 'پاک کردن',
+				'close'          => 'بستن',
+				'pickDate'       => 'انتخاب تاریخ',
+			),
 		)
 	);
 
@@ -57,17 +69,40 @@ function afq_signup_form_shortcode( $atts ) {
 				<div class="afq-signup__grid">
 					<?php foreach ( $section['fields'] as $key => $field ) : ?>
 						<?php
-						$field_id = 'afq-signup-' . $key;
-						$is_wide  = ( 'textarea' === $field['type'] );
-						$is_ltr   = ! empty( $field['ltr'] );
+						$field_id    = 'afq-signup-' . $key;
+						$is_wide     = ( 'textarea' === $field['type'] );
+						$is_ltr      = ! empty( $field['ltr'] );
+						$is_required = ! empty( $field['required'] );
+						$is_city     = ! empty( $field['city_of'] );
+						$is_jalali   = ( isset( $field['validate'] ) && 'jalali_date' === $field['validate'] );
+						$required_at = $is_required ? ' required' : '';
 						?>
-						<div class="afq-signup__field<?php echo $is_wide ? ' afq-signup__field--wide' : ''; ?>" data-afq-field="<?php echo esc_attr( $key ); ?>">
+						<div class="afq-signup__field<?php echo $is_wide ? ' afq-signup__field--wide' : ''; ?>"
+							data-afq-field="<?php echo esc_attr( $key ); ?>"
+							data-afq-required="<?php echo $is_required ? '1' : '0'; ?>">
+
 							<label for="<?php echo esc_attr( $field_id ); ?>">
-								<?php echo esc_html( $field['label'] ); ?> <b>*</b>
+								<?php echo esc_html( $field['label'] ); ?>
+								<?php if ( $is_required ) : ?>
+									<b>*</b>
+								<?php else : ?>
+									<i class="afq-signup__optional">(اختیاری)</i>
+								<?php endif; ?>
 							</label>
 
-							<?php if ( 'select' === $field['type'] ) : ?>
-								<select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>" required>
+							<?php if ( $is_city ) : ?>
+								<select id="<?php echo esc_attr( $field_id ); ?>"
+									name="<?php echo esc_attr( $key ); ?>"
+									class="afq-signup__city"
+									data-afq-city-of="<?php echo esc_attr( $field['city_of'] ); ?>"
+									<?php echo esc_attr( $required_at ); ?>>
+									<option value="">ابتدا استان را انتخاب کنید</option>
+								</select>
+								<input type="text" class="afq-signup__city-other" style="display:none;"
+									placeholder="نام شهر را وارد کنید" autocomplete="off" />
+
+							<?php elseif ( 'select' === $field['type'] ) : ?>
+								<select id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>"<?php echo esc_attr( $required_at ); ?>>
 									<option value="">انتخاب کنید</option>
 									<?php foreach ( $field['options'] as $option ) : ?>
 										<option value="<?php echo esc_attr( $option ); ?>"><?php echo esc_html( $option ); ?></option>
@@ -75,11 +110,17 @@ function afq_signup_form_shortcode( $atts ) {
 								</select>
 
 							<?php elseif ( 'textarea' === $field['type'] ) : ?>
-								<textarea id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>" rows="3" required
+								<textarea id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>" rows="3"<?php echo esc_attr( $required_at ); ?>
 									placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"></textarea>
 
+							<?php elseif ( $is_jalali ) : ?>
+								<input type="text" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>"<?php echo esc_attr( $required_at ); ?>
+									class="is-ltr afq-signup__jalali"
+									placeholder="<?php echo esc_attr( $field['placeholder'] ?? 'انتخاب تاریخ' ); ?>"
+									data-afq-jalali readonly autocomplete="off" />
+
 							<?php else : ?>
-								<input type="text" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>" required
+								<input type="text" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( $key ); ?>"<?php echo esc_attr( $required_at ); ?>
 									placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
 									<?php echo $is_ltr ? 'class="is-ltr"' : ''; ?> />
 							<?php endif; ?>
@@ -94,9 +135,21 @@ function afq_signup_form_shortcode( $atts ) {
 		<fieldset class="afq-signup__section">
 			<legend class="afq-signup__section-title">نوع ثبت‌نام</legend>
 
+			<?php $type_required = afq_signup_is_field_required( 'signup_type' ); ?>
+
 			<div class="afq-signup__grid">
-				<div class="afq-signup__field" data-afq-field="signup_type">
-					<label for="afq-signup-signup_type">نوع ثبت‌نام <b>*</b></label>
+				<div class="afq-signup__field"
+					data-afq-field="signup_type"
+					data-afq-required="<?php echo $type_required ? '1' : '0'; ?>">
+
+					<label for="afq-signup-signup_type">
+						نوع ثبت‌نام
+						<?php if ( $type_required ) : ?>
+							<b>*</b>
+						<?php else : ?>
+							<i class="afq-signup__optional">(اختیاری)</i>
+						<?php endif; ?>
+					</label>
 
 					<?php if ( $fixed_type ) : ?>
 						<select id="afq-signup-signup_type" disabled>
@@ -104,7 +157,7 @@ function afq_signup_form_shortcode( $atts ) {
 						</select>
 						<input type="hidden" name="signup_type" value="<?php echo esc_attr( $fixed_type ); ?>" />
 					<?php else : ?>
-						<select id="afq-signup-signup_type" name="signup_type" required>
+						<select id="afq-signup-signup_type" name="signup_type"<?php echo $type_required ? ' required' : ''; ?>>
 							<option value="">انتخاب کنید</option>
 							<?php foreach ( $types as $type_option ) : ?>
 								<option value="<?php echo esc_attr( $type_option ); ?>"><?php echo esc_html( $type_option ); ?></option>

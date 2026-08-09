@@ -56,6 +56,14 @@ function afq_option_admin_assets( $hook ) {
 		wp_enqueue_script( 'afq-car-details', $js . 'admin-car-details.js', array( 'afq-car-media' ), $ver, true );
 	}
 
+	/* ---- Signup: form settings screen. ---- */
+
+	if ( 'afq_signup_page_afq-signup-settings' === $hook ) {
+		wp_enqueue_style( 'afq-signup-admin', $css . 'admin-signup.css', array(), $ver );
+		wp_enqueue_script( 'afq-signup-settings', $js . 'admin-signup-settings.js', array(), $ver, true );
+		return;
+	}
+
 	if ( ! $is_post_edit ) {
 		return;
 	}
