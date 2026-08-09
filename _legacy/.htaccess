@@ -1,0 +1,11 @@
+# These are the original functions.php snippets kept for reference only.
+# They have no <?php opening tag, so a direct request would dump their
+# source as plain text. Block web access to this folder entirely.
+
+<IfModule mod_authz_core.c>
+	Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+	Order allow,deny
+	Deny from all
+</IfModule>

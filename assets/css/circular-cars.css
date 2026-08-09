@@ -1,0 +1,131 @@
+div.afq-circ-cars,
+div.afq-circ-cars * {
+	box-sizing: border-box;
+}
+
+div.afq-circ-cars {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 22px;
+}
+
+div.afq-circ-cars a.afq-circ-car {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border: 1px solid #e7ebf0;
+	border-radius: 16px;
+	overflow: hidden;
+	text-decoration: none !important;
+	box-shadow: 0 6px 20px rgba(15, 20, 30, 0.06);
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+div.afq-circ-cars a.afq-circ-car:hover {
+	box-shadow: 0 16px 36px rgba(15, 20, 30, 0.13);
+	transform: translateY(-4px);
+}
+
+/* Ribbon */
+div.afq-circ-cars span.afq-circ-car__ribbon {
+	position: absolute;
+	top: 14px;
+	inset-inline-start: -34px;
+	transform: rotate(45deg);
+	background: #c62828;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	padding: 5px 40px;
+	z-index: 2;
+	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+div.afq-circ-cars.is-soldout span.afq-circ-car__media {
+	filter: grayscale(0.55);
+}
+
+/* Media (normal/hover swap) */
+div.afq-circ-cars span.afq-circ-car__media {
+	position: relative;
+	display: block;
+	background: #f2f4f7;
+}
+div.afq-circ-cars img.afq-circ-car__img {
+	width: 100% !important;
+	height: 190px !important;
+	object-fit: cover;
+	display: block !important;
+	margin: 0 !important;
+	transition: opacity 0.3s ease;
+}
+div.afq-circ-cars img.afq-circ-car__img--hover {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+}
+div.afq-circ-cars a.afq-circ-car:hover span.has-hover img.afq-circ-car__img--hover {
+	opacity: 1;
+}
+div.afq-circ-cars a.afq-circ-car:hover span.has-hover img.afq-circ-car__img--normal {
+	opacity: 0;
+}
+
+/* Body */
+div.afq-circ-cars span.afq-circ-car__body {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 16px 18px 18px;
+}
+div.afq-circ-cars span.afq-circ-car__name {
+	font-size: 14.5px;
+	font-weight: 700;
+	color: #1f2937;
+	line-height: 1.7;
+}
+div.afq-circ-cars span.afq-circ-car__prices {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+div.afq-circ-cars span.afq-circ-car__prices del {
+	color: #9aa3b0;
+	font-size: 12px;
+	text-decoration: line-through;
+}
+div.afq-circ-cars span.afq-circ-car__prices ins {
+	color: #1f2937;
+	font-size: 13.5px;
+	font-weight: 700;
+	text-decoration: none;
+	background: none;
+}
+div.afq-circ-cars span.afq-circ-car__cta {
+	display: inline-block;
+	margin-top: 2px;
+	padding: 9px 0;
+	text-align: center;
+	border-radius: 999px;
+	background: linear-gradient(135deg, #d7dce3, #9aa3b0);
+	color: #14181f;
+	font-size: 12.5px;
+	font-weight: 700;
+	transition: filter 0.15s ease;
+}
+div.afq-circ-cars a.afq-circ-car:hover span.afq-circ-car__cta {
+	filter: brightness(1.05);
+}
+
+@media (max-width: 640px) {
+	div.afq-circ-cars {
+		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+		gap: 14px;
+	}
+	div.afq-circ-cars img.afq-circ-car__img {
+		height: 130px !important;
+	}
+	div.afq-circ-cars span.afq-circ-car__body {
+		padding: 12px 14px 14px;
+	}
+}

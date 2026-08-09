@@ -1,0 +1,174 @@
+form.afq-signup,
+form.afq-signup * {
+	box-sizing: border-box;
+}
+
+form.afq-signup {
+	display: flex;
+	flex-direction: column;
+	gap: 22px;
+}
+
+form.afq-signup fieldset.afq-signup__section {
+	border: 1px solid #e7ebf0;
+	border-radius: 16px;
+	background: #fff;
+	padding: 10px 22px 22px;
+	margin: 0;
+	box-shadow: 0 6px 20px rgba(15, 20, 30, 0.05);
+}
+form.afq-signup legend.afq-signup__section-title {
+	padding: 6px 16px;
+	background: linear-gradient(135deg, #14181f 0%, #232a36 60%, #2c3442 100%);
+	color: #e7ebf0;
+	font-size: 13.5px;
+	font-weight: 700;
+	border-radius: 999px;
+}
+form.afq-signup p.afq-signup__hint {
+	margin: 4px 0 12px !important;
+	font-size: 12.5px;
+	color: #6b7280;
+}
+
+form.afq-signup div.afq-signup__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 16px;
+}
+form.afq-signup div.afq-signup__field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+form.afq-signup div.afq-signup__field--wide {
+	grid-column: 1 / -1;
+}
+form.afq-signup div.afq-signup__field label {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #374151;
+}
+form.afq-signup div.afq-signup__field label b {
+	color: #c62828;
+}
+form.afq-signup div.afq-signup__field input,
+form.afq-signup div.afq-signup__field select,
+form.afq-signup div.afq-signup__field textarea {
+	width: 100% !important;
+	border: 1px solid #d9dee5 !important;
+	border-radius: 10px !important;
+	background: #fbfcfd !important;
+	padding: 10px 13px !important;
+	font-size: 13px !important;
+	font-family: inherit !important;
+	color: #1f2937 !important;
+	box-shadow: 0 1px 2px rgba(15, 20, 30, 0.03) !important;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+form.afq-signup div.afq-signup__field input:focus,
+form.afq-signup div.afq-signup__field select:focus,
+form.afq-signup div.afq-signup__field textarea:focus {
+	border-color: #aab3bf !important;
+	box-shadow: 0 0 0 3px rgba(170, 179, 191, 0.25) !important;
+	outline: none !important;
+}
+form.afq-signup div.afq-signup__field input.is-ltr {
+	direction: ltr;
+	text-align: left;
+}
+form.afq-signup div.afq-signup__field select:disabled {
+	background: #eef1f5 !important;
+	color: #4b5563 !important;
+	cursor: not-allowed;
+}
+form.afq-signup div.afq-signup__field.has-error input,
+form.afq-signup div.afq-signup__field.has-error select,
+form.afq-signup div.afq-signup__field.has-error textarea {
+	border-color: #d9534f !important;
+}
+form.afq-signup span.afq-signup__error {
+	display: none;
+	font-size: 11.5px;
+	color: #c62828;
+}
+form.afq-signup div.afq-signup__field.has-error span.afq-signup__error {
+	display: block;
+}
+
+form.afq-signup input.afq-signup__hp {
+	position: absolute !important;
+	left: -9999px !important;
+	opacity: 0;
+	height: 0;
+	width: 0;
+	padding: 0;
+	border: none;
+}
+
+form.afq-signup div.afq-signup__footer {
+	display: flex;
+	justify-content: center;
+}
+form.afq-signup button.afq-signup__submit {
+	min-width: 220px;
+	margin: 0 !important;
+	padding: 13px 34px !important;
+	border: none !important;
+	border-radius: 999px !important;
+	background: linear-gradient(135deg, #2c3442, #14181f) !important;
+	color: #e7ebf0 !important;
+	font-size: 14px !important;
+	font-weight: 700;
+	font-family: inherit !important;
+	cursor: pointer;
+	box-shadow: 0 10px 24px rgba(20, 24, 31, 0.3) !important;
+	transition: filter 0.15s ease, transform 0.15s ease;
+}
+form.afq-signup button.afq-signup__submit:hover {
+	filter: brightness(1.25);
+	transform: translateY(-1px);
+}
+form.afq-signup button.afq-signup__submit:disabled {
+	opacity: 0.7;
+	cursor: wait;
+}
+form.afq-signup span.afq-signup__submit-loading {
+	display: none;
+}
+form.afq-signup.is-loading span.afq-signup__submit-loading {
+	display: inline;
+}
+form.afq-signup.is-loading span.afq-signup__submit-text {
+	display: none;
+}
+
+form.afq-signup div.afq-signup__message {
+	display: none;
+	padding: 15px 18px;
+	border-radius: 12px;
+	font-size: 13.5px;
+	font-weight: 600;
+	text-align: center;
+}
+form.afq-signup div.afq-signup__message.is-success {
+	display: block;
+	background: #e5f5ec;
+	color: #1f7a4d;
+	border: 1px solid #bfe5d0;
+}
+form.afq-signup div.afq-signup__message.is-error {
+	display: block;
+	background: #f5e7e5;
+	color: #a04a41;
+	border: 1px solid #e8c8c3;
+}
+
+@media (max-width: 640px) {
+	form.afq-signup fieldset.afq-signup__section {
+		padding: 8px 16px 16px;
+	}
+	form.afq-signup button.afq-signup__submit {
+		width: 100%;
+	}
+}

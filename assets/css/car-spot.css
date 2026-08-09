@@ -1,0 +1,293 @@
+/*
+ * Selectors are intentionally high-specificity and fully scoped under
+ * .afq-spot (element + class), with resets on properties Elementor /
+ * theme kits commonly override on button, ul and img elements.
+ */
+
+div.afq-spot,
+div.afq-spot * {
+	box-sizing: border-box;
+}
+
+/* Stage */
+div.afq-spot div.afq-spot__stage {
+	position: relative;
+	display: block;
+	line-height: 0;
+}
+div.afq-spot div.afq-spot__stage img.afq-spot__image {
+	width: 100% !important;
+	max-width: 100% !important;
+	height: auto !important;
+	display: block !important;
+	margin: 0 !important;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+/* Hotspot button (hard reset against Elementor/theme button styles) */
+div.afq-spot div.afq-spot__stage button.afq-spot__btn {
+	position: absolute !important;
+	transform: translate(-50%, -50%);
+	display: flex !important;
+	align-items: center;
+	gap: 8px;
+	width: auto !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	outline: none;
+	color: inherit !important;
+	font-family: inherit !important;
+	line-height: 1 !important;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+	cursor: pointer;
+	z-index: 2;
+}
+div.afq-spot div.afq-spot__stage button.afq-spot__btn:hover,
+div.afq-spot div.afq-spot__stage button.afq-spot__btn:focus {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	transform: translate(-50%, -50%);
+}
+div.afq-spot button.afq-spot__btn span.afq-spot__btn-dot {
+	position: relative;
+	display: block;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #d7dce3, #9aa3b0);
+	box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85), 0 4px 14px rgba(0, 0, 0, 0.35);
+	flex-shrink: 0;
+}
+div.afq-spot button.afq-spot__btn span.afq-spot__btn-dot::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	background: rgba(199, 205, 214, 0.6);
+	animation: afq-spot-pulse 2s ease-out infinite;
+}
+div.afq-spot button.afq-spot__btn span.afq-spot__btn-dot::after {
+	content: "+";
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	font-weight: 700;
+	color: #14181f;
+}
+@keyframes afq-spot-pulse {
+	0%   { transform: scale(1);   opacity: 0.9; }
+	70%  { transform: scale(2.4); opacity: 0;   }
+	100% { transform: scale(2.4); opacity: 0;   }
+}
+
+/* Label: always visible (no hover needed) */
+div.afq-spot button.afq-spot__btn span.afq-spot__btn-label {
+	display: inline-block;
+	background: rgba(20, 24, 31, 0.85);
+	color: #e7ebf0 !important;
+	font-size: 12px !important;
+	font-weight: 600;
+	padding: 6px 12px !important;
+	margin: 0 !important;
+	border-radius: 999px;
+	white-space: nowrap;
+	line-height: 1.4 !important;
+	pointer-events: none;
+	transition: background 0.2s ease;
+}
+div.afq-spot button.afq-spot__btn:hover span.afq-spot__btn-label,
+div.afq-spot button.afq-spot__btn:focus-visible span.afq-spot__btn-label {
+	background: rgba(20, 24, 31, 1);
+}
+
+/* Modal */
+div.afq-spot div.afq-spot-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 99999;
+	display: none;
+}
+div.afq-spot div.afq-spot-modal.is-open {
+	display: block;
+}
+div.afq-spot div.afq-spot-modal div.afq-spot-modal__overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(10, 13, 18, 0.6);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+div.afq-spot div.afq-spot-modal div.afq-spot-modal__card {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: min(560px, 92vw);
+	max-height: 82vh;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border-radius: 16px;
+	overflow: hidden;
+	box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+	animation: afq-spot-modal-in 0.25s ease;
+}
+@keyframes afq-spot-modal-in {
+	from { opacity: 0; transform: translate(-50%, -46%); }
+	to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+div.afq-spot div.afq-spot-modal__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 20px;
+	background: linear-gradient(135deg, #14181f 0%, #232a36 60%, #2c3442 100%);
+}
+div.afq-spot span.afq-spot-modal__title {
+	color: #e7ebf0;
+	font-size: 15px;
+	font-weight: 700;
+}
+div.afq-spot button.afq-spot-modal__close {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 30px !important;
+	height: 30px !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, 0.12) !important;
+	box-shadow: none !important;
+	color: #fff !important;
+	font-size: 17px !important;
+	line-height: 1 !important;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+div.afq-spot button.afq-spot-modal__close:hover {
+	background: rgba(255, 255, 255, 0.25) !important;
+}
+div.afq-spot div.afq-spot-modal__body {
+	padding: 8px 20px 18px;
+	overflow-y: auto;
+}
+div.afq-spot div.afq-spot-modal__row {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 11px 0;
+	border-bottom: 1px solid #f0f2f5;
+}
+div.afq-spot div.afq-spot-modal__row:last-child {
+	border-bottom: none;
+}
+div.afq-spot span.afq-spot-modal__label {
+	font-size: 12.5px;
+	color: #6b7280;
+	flex-shrink: 0;
+}
+div.afq-spot span.afq-spot-modal__value {
+	font-size: 13.5px;
+	font-weight: 600;
+	color: #1f2937;
+	text-align: left;
+}
+div.afq-spot div.afq-spot-modal__row--list {
+	flex-direction: column;
+	align-items: stretch;
+}
+div.afq-spot ul.afq-spot-modal__list {
+	margin: 8px 0 0 !important;
+	padding: 0 !important;
+	list-style: none !important;
+}
+div.afq-spot ul.afq-spot-modal__list li {
+	position: relative;
+	margin: 0 !important;
+	padding: 6px 20px 6px 0 !important;
+	list-style: none !important;
+	font-size: 13px;
+	color: #1f2937;
+}
+div.afq-spot ul.afq-spot-modal__list li::before {
+	content: "";
+	position: absolute;
+	right: 4px;
+	top: 13px;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #d7dce3, #9aa3b0);
+}
+
+/* Empty state (no specs entered) */
+div.afq-spot.afq-spot--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 180px;
+	border: 1px dashed #d9dde3;
+	border-radius: 14px;
+	background: #f8f9fa;
+}
+div.afq-spot.afq-spot--empty p.afq-spot__empty-text {
+	margin: 0 !important;
+	padding: 0 !important;
+	font-size: 14px;
+	font-weight: 600;
+	color: #9ca3af;
+}
+
+body.afq-spot-lock {
+	overflow: hidden;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+	div.afq-spot button.afq-spot__btn span.afq-spot__btn-dot {
+		width: 18px;
+		height: 18px;
+		box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85), 0 3px 10px rgba(0, 0, 0, 0.35);
+	}
+	div.afq-spot button.afq-spot__btn span.afq-spot__btn-dot::after {
+		font-size: 12px;
+	}
+	div.afq-spot button.afq-spot__btn span.afq-spot__btn-label {
+		font-size: 10.5px !important;
+		padding: 5px 10px !important;
+	}
+	div.afq-spot div.afq-spot__stage button.afq-spot__btn {
+		min-height: 36px !important;
+	}
+	div.afq-spot div.afq-spot-modal div.afq-spot-modal__card {
+		top: auto;
+		bottom: 0;
+		left: 0;
+		transform: none;
+		width: 100%;
+		max-height: 84vh;
+		border-radius: 18px 18px 0 0;
+		animation: afq-spot-sheet-in 0.25s ease;
+	}
+	@keyframes afq-spot-sheet-in {
+		from { transform: translateY(30px); opacity: 0; }
+		to   { transform: translateY(0);    opacity: 1; }
+	}
+}

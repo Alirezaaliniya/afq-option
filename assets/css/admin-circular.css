@@ -1,0 +1,174 @@
+#afq_circular_details.postbox {
+	border: none;
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 10px 30px rgba(15, 20, 30, 0.08);
+}
+#afq_circular_details .postbox-header {
+	background: linear-gradient(135deg, #14181f 0%, #232a36 60%, #2c3442 100%);
+	border-bottom: none;
+}
+#afq_circular_details .postbox-header .hndle {
+	color: #e8cf9a;
+	font-size: 13px;
+}
+#afq_circular_details .postbox-header .handle-actions button {
+	color: rgba(255, 255, 255, 0.7);
+}
+#afq_circular_details .inside {
+	margin: 0;
+	padding: 16px;
+	background: #fbfbfc;
+}
+
+.afq-circular-admin__card {
+	background: #fff;
+	border: 1px solid #eef0f3;
+	border-radius: 12px;
+	padding: 14px;
+	margin-bottom: 14px;
+	box-shadow: 0 2px 8px rgba(15, 20, 30, 0.04);
+}
+.afq-circular-admin__card:last-of-type {
+	margin-bottom: 0;
+}
+.afq-circular-admin__toggle-row,
+.afq-circular-admin__repeater-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+.afq-circular-admin strong {
+	display: block;
+	font-size: 13px;
+	color: #1f2937;
+}
+.afq-circular-admin p {
+	margin: 4px 0 0;
+	font-size: 11.5px;
+	color: #6b7280;
+}
+.afq-circular-admin__repeater-head {
+	margin-bottom: 12px;
+}
+
+/* Toggle switch */
+.afq-switch {
+	position: relative;
+	display: inline-block;
+	width: 52px;
+	height: 28px;
+	flex-shrink: 0;
+}
+.afq-switch input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+.afq-switch__slider {
+	position: absolute;
+	inset: 0;
+	background: #d5d9e0;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+.afq-switch__slider::before {
+	content: "";
+	position: absolute;
+	top: 3px;
+	inset-inline-start: 3px;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+	transition: transform 0.2s ease;
+}
+.afq-switch input:checked + .afq-switch__slider {
+	background: linear-gradient(135deg, #d8b46a, #b8934a);
+}
+.afq-switch input:checked + .afq-switch__slider::before {
+	transform: translateX(-24px);
+}
+.afq-switch input:focus-visible + .afq-switch__slider {
+	box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.3);
+}
+
+/* Repeater */
+.afq-circular-rows {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.afq-circular-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background: #fbfbfc;
+	border: 1px solid #eef0f3;
+	border-radius: 10px;
+	padding: 8px 10px;
+}
+.afq-circular-row__handle {
+	color: #c3c9d1;
+	cursor: grab;
+	flex-shrink: 0;
+}
+.afq-circular-row.ui-sortable-helper {
+	box-shadow: 0 10px 22px rgba(15, 20, 30, 0.18);
+	cursor: grabbing;
+}
+.afq-circular-row select {
+	flex: 1;
+	border: 1px solid #e4e7ec;
+	border-radius: 8px;
+	background: #fff;
+	padding: 6px 10px;
+	font-size: 13px;
+	color: #1f2937;
+	max-width: none;
+}
+.afq-circular-row select:focus {
+	border-color: #c9a45c;
+	box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.18);
+	outline: none;
+}
+
+.afq-circular-admin .afq-circular-btn.button {
+	border-radius: 8px;
+	border: 1px solid #e4e7ec;
+	background: linear-gradient(135deg, #d8b46a, #b8934a);
+	border-color: transparent;
+	color: #14181f;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 2.2;
+	padding: 0 14px;
+	flex-shrink: 0;
+}
+.afq-circular-admin .afq-circular-btn.button:hover {
+	filter: brightness(1.06);
+	color: #14181f;
+}
+.afq-circular-admin .afq-circular-btn--ghost.button {
+	background: #fff;
+	border-color: #e4e7ec;
+	color: #374151;
+	font-weight: 400;
+}
+.afq-circular-admin .afq-circular-btn--ghost.button:hover {
+	border-color: #d9534f;
+	color: #d9534f;
+	filter: none;
+}
+.afq-circular-empty {
+	margin: 10px 0 0 !important;
+	padding: 14px;
+	text-align: center;
+	border: 1px dashed #d9dde3;
+	border-radius: 10px;
+	background: #f6f7f9;
+}

@@ -1,0 +1,272 @@
+div.afq-voices,
+div.afq-voices * {
+	box-sizing: border-box;
+}
+
+/* Grid */
+div.afq-voices div.afq-voices__grid {
+	display: grid;
+	grid-template-columns: repeat(var(--afq-voice-cols, 3), minmax(0, 1fr));
+	gap: 22px;
+}
+@media (max-width: 1024px) {
+	div.afq-voices div.afq-voices__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+@media (max-width: 640px) {
+	div.afq-voices div.afq-voices__grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Card */
+div.afq-voices article.afq-voice-card {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	background: #fff;
+	border: 1px solid #eef0f3;
+	border-radius: 16px;
+	padding: 22px;
+	margin: 0;
+	box-shadow: 0 6px 20px rgba(15, 20, 30, 0.06);
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+div.afq-voices article.afq-voice-card:hover {
+	box-shadow: 0 16px 36px rgba(15, 20, 30, 0.12);
+	transform: translateY(-3px);
+}
+div.afq-voices div.afq-voice-card__head {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+div.afq-voices div.afq-voice-card__avatar {
+	width: 54px;
+	height: 54px;
+	border-radius: 50%;
+	overflow: hidden;
+	flex-shrink: 0;
+	box-shadow: 0 0 0 2px #fff, 0 0 0 4px #d7dce3;
+}
+div.afq-voices div.afq-voice-card__avatar img {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+	display: block !important;
+	margin: 0 !important;
+	border-radius: 0;
+}
+div.afq-voices h3.afq-voice-card__name {
+	margin: 0 !important;
+	padding: 0 !important;
+	font-size: 15px;
+	font-weight: 700;
+	color: #1f2937;
+	line-height: 1.5;
+	flex: 1;
+	min-width: 0;
+}
+div.afq-voices button.afq-voice-card__video-btn {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 40px !important;
+	height: 40px !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 50% !important;
+	background: linear-gradient(135deg, #d7dce3, #9aa3b0) !important;
+	box-shadow: 0 6px 14px rgba(139, 149, 163, 0.45) !important;
+	color: #14181f !important;
+	cursor: pointer;
+	flex-shrink: 0;
+	transition: transform 0.15s ease, filter 0.15s ease;
+}
+div.afq-voices button.afq-voice-card__video-btn:hover {
+	transform: scale(1.08);
+	filter: brightness(1.05);
+	background: linear-gradient(135deg, #d7dce3, #9aa3b0) !important;
+}
+div.afq-voices button.afq-voice-card__video-btn svg {
+	width: 20px;
+	height: 20px;
+}
+div.afq-voices p.afq-voice-card__desc {
+	margin: 0 !important;
+	padding: 0 !important;
+	font-size: 13.5px;
+	line-height: 2;
+	color: #4b5563;
+}
+
+/* Audio player */
+div.afq-voices div.afq-voice-player {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: auto;
+	background: #f2f4f7;
+	border: 1px solid #d9dee5;
+	border-radius: 999px;
+	padding: 8px 14px 8px 8px;
+}
+div.afq-voices button.afq-voice-player__btn {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 38px !important;
+	height: 38px !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 50% !important;
+	background: linear-gradient(135deg, #14181f, #2c3442) !important;
+	box-shadow: none !important;
+	color: #e7ebf0 !important;
+	cursor: pointer;
+	flex-shrink: 0;
+	transition: transform 0.15s ease;
+}
+div.afq-voices button.afq-voice-player__btn:hover {
+	transform: scale(1.06);
+	background: linear-gradient(135deg, #14181f, #2c3442) !important;
+}
+div.afq-voices button.afq-voice-player__btn svg {
+	width: 18px;
+	height: 18px;
+}
+div.afq-voices .afq-voice-player__icon-pause {
+	display: none;
+}
+div.afq-voices div.afq-voice-player.is-playing .afq-voice-player__icon-pause {
+	display: block;
+}
+div.afq-voices div.afq-voice-player.is-playing .afq-voice-player__icon-play {
+	display: none;
+}
+div.afq-voices div.afq-voice-player__track {
+	position: relative;
+	flex: 1;
+	height: 5px;
+	border-radius: 999px;
+	background: rgba(154, 163, 176, 0.3);
+	cursor: pointer;
+	overflow: hidden;
+}
+div.afq-voices div.afq-voice-player__progress {
+	position: absolute;
+	inset-inline-start: 0;
+	top: 0;
+	bottom: 0;
+	width: 0;
+	border-radius: 999px;
+	background: linear-gradient(90deg, #d7dce3, #9aa3b0);
+}
+div.afq-voices span.afq-voice-player__time {
+	font-size: 11.5px;
+	font-weight: 600;
+	color: #667081;
+	direction: ltr;
+	flex-shrink: 0;
+	min-width: 34px;
+	text-align: center;
+}
+
+/* Video modal */
+div.afq-voices div.afq-voice-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 99999;
+	display: none;
+}
+div.afq-voices div.afq-voice-modal.is-open {
+	display: block;
+}
+div.afq-voices div.afq-voice-modal__overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(10, 13, 18, 0.7);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+div.afq-voices div.afq-voice-modal__card {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: min(760px, 94vw);
+	background: #fff;
+	border-radius: 16px;
+	overflow: hidden;
+	box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
+	animation: afq-voice-modal-in 0.25s ease;
+}
+@keyframes afq-voice-modal-in {
+	from { opacity: 0; transform: translate(-50%, -46%); }
+	to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+div.afq-voices div.afq-voice-modal__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 18px;
+	background: linear-gradient(135deg, #14181f 0%, #232a36 60%, #2c3442 100%);
+}
+div.afq-voices span.afq-voice-modal__title {
+	color: #e7ebf0;
+	font-size: 14px;
+	font-weight: 700;
+}
+div.afq-voices button.afq-voice-modal__close {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 30px !important;
+	height: 30px !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, 0.12) !important;
+	box-shadow: none !important;
+	color: #fff !important;
+	font-size: 17px !important;
+	line-height: 1 !important;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+div.afq-voices button.afq-voice-modal__close:hover {
+	background: rgba(255, 255, 255, 0.25) !important;
+}
+div.afq-voices div.afq-voice-modal__body {
+	background: #000;
+}
+div.afq-voices div.afq-voice-modal__body video,
+div.afq-voices div.afq-voice-modal__body iframe {
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	border: none;
+}
+
+body.afq-voice-lock {
+	overflow: hidden;
+}
+
+@media (max-width: 640px) {
+	div.afq-voices article.afq-voice-card {
+		padding: 18px;
+	}
+	div.afq-voices div.afq-voice-modal__card {
+		width: 94vw;
+	}
+}

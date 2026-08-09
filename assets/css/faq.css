@@ -1,0 +1,128 @@
+div.afq-faq,
+div.afq-faq * {
+	box-sizing: border-box;
+}
+
+div.afq-faq {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+div.afq-faq div.afq-faq__item {
+	background: #fff;
+	border: 1px solid #eef0f3;
+	border-radius: 14px;
+	overflow: hidden;
+	box-shadow: 0 4px 14px rgba(15, 20, 30, 0.05);
+	transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+div.afq-faq div.afq-faq__item.is-open {
+	border-color: #c7cdd6;
+	box-shadow: 0 12px 28px rgba(139, 149, 163, 0.18);
+}
+
+/* Question button (hard reset against theme/Elementor button styles) */
+div.afq-faq button.afq-faq__question {
+	display: flex !important;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	width: 100% !important;
+	min-height: 0 !important;
+	margin: 0 !important;
+	padding: 18px 20px !important;
+	border: none !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	color: #1f2937 !important;
+	font-family: inherit !important;
+	font-size: 14.5px !important;
+	font-weight: 700;
+	line-height: 1.7 !important;
+	text-align: start;
+	letter-spacing: normal !important;
+	text-transform: none !important;
+	cursor: pointer;
+}
+div.afq-faq button.afq-faq__question:hover {
+	background: transparent !important;
+	color: #1f2937 !important;
+}
+div.afq-faq span.afq-faq__question-text {
+	flex: 1;
+	min-width: 0;
+}
+div.afq-faq span.afq-faq__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #d7dce3, #9aa3b0);
+	color: #14181f;
+	flex-shrink: 0;
+	transition: transform 0.3s ease;
+}
+div.afq-faq span.afq-faq__icon svg {
+	width: 15px;
+	height: 15px;
+}
+div.afq-faq div.afq-faq__item.is-open span.afq-faq__icon {
+	transform: rotate(45deg);
+}
+
+/* Answer (animated open/close) */
+div.afq-faq div.afq-faq__answer {
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 0.3s ease;
+}
+div.afq-faq div.afq-faq__item.is-open div.afq-faq__answer {
+	grid-template-rows: 1fr;
+}
+div.afq-faq div.afq-faq__answer-inner {
+	min-height: 0;
+	overflow: hidden;
+}
+div.afq-faq div.afq-faq__item.is-open div.afq-faq__answer-inner {
+	padding: 0 20px 18px;
+}
+div.afq-faq div.afq-faq__answer-inner,
+div.afq-faq div.afq-faq__answer-inner p {
+	font-size: 13.5px;
+	line-height: 2.1;
+	color: #4b5563;
+}
+div.afq-faq div.afq-faq__answer-inner p {
+	margin: 0 0 10px;
+}
+div.afq-faq div.afq-faq__answer-inner p:last-child {
+	margin-bottom: 0;
+}
+div.afq-faq div.afq-faq__answer-inner ul,
+div.afq-faq div.afq-faq__answer-inner ol {
+	margin: 0 0 10px;
+	padding-inline-start: 20px;
+}
+div.afq-faq div.afq-faq__answer-inner img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 10px;
+}
+
+@media (max-width: 640px) {
+	div.afq-faq button.afq-faq__question {
+		padding: 15px 16px !important;
+		font-size: 13.5px !important;
+	}
+	div.afq-faq div.afq-faq__item.is-open div.afq-faq__answer-inner {
+		padding: 0 16px 15px;
+	}
+	div.afq-faq span.afq-faq__icon {
+		width: 28px;
+		height: 28px;
+	}
+}
