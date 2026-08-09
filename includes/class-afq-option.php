@@ -58,9 +58,11 @@ final class AFQ_Option {
 
 		/* ---- Shared: needed on every request type. ---- */
 		require_once $path . 'config.php';
+		require_once $path . 'config-request.php';
 		require_once $path . 'helpers.php';
 		require_once $path . 'post-types.php';
 		require_once $path . 'ajax.php';
+		require_once $path . 'ajax-request.php';
 		require_once $path . 'elementor.php';
 
 		/*
@@ -74,6 +76,8 @@ final class AFQ_Option {
 		require_once $path . 'frontend/shortcode-voice-grid.php';
 		require_once $path . 'frontend/shortcode-circular-cars.php';
 		require_once $path . 'frontend/shortcode-signup-form.php';
+		require_once $path . 'frontend/shortcode-request-form.php';
+		require_once $path . 'frontend/shortcode-request-track.php';
 
 		/* ---- Admin only: meta boxes, list tables, admin assets. ---- */
 		if ( is_admin() ) {
@@ -86,6 +90,8 @@ final class AFQ_Option {
 			require_once $path . 'admin/metabox-circular.php';
 			require_once $path . 'admin/metabox-signup.php';
 			require_once $path . 'admin/settings-signup.php';
+			require_once $path . 'admin/metabox-request.php';
+			require_once $path . 'admin/settings-request.php';
 			require_once $path . 'admin/taxonomy-fields.php';
 		}
 	}

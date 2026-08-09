@@ -1,0 +1,606 @@
+/**
+ * Customer Voice form + tracking box.
+ *
+ * Selectors are scoped and high-specificity so theme/Elementor kits do not
+ * override the inputs and buttons.
+ */
+
+div.afq-voc,
+div.afq-voc *,
+div.afq-track,
+div.afq-track * {
+	box-sizing: border-box;
+}
+
+/* =========================================================================
+ * Request form
+ * ====================================================================== */
+
+div.afq-voc {
+	background: #fff;
+	border: 1px solid #e8ecf3;
+	border-radius: 14px;
+	padding: 24px;
+	box-shadow: 0 6px 24px rgba(15, 33, 64, 0.06);
+}
+
+div.afq-voc p.afq-voc__intro {
+	margin: 0 0 20px !important;
+	font-size: 13px;
+	line-height: 2.1;
+	color: #6b7280;
+}
+
+div.afq-voc section.afq-voc__section {
+	margin-bottom: 22px;
+}
+
+div.afq-voc h3.afq-voc__section-title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0 0 14px !important;
+	padding: 0 0 12px !important;
+	border-bottom: 1px solid #eef1f6;
+	font-size: 14px;
+	font-weight: 700;
+	color: #16264a;
+}
+div.afq-voc span.afq-voc__section-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 9px;
+	background: #eef2f8;
+	color: #16264a;
+	flex-shrink: 0;
+}
+div.afq-voc span.afq-voc__section-icon svg {
+	width: 17px;
+	height: 17px;
+}
+
+/* Fields */
+div.afq-voc div.afq-voc__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 16px;
+}
+div.afq-voc div.afq-voc__field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	min-width: 0;
+}
+div.afq-voc div.afq-voc__field--wide {
+	grid-column: 1 / -1;
+}
+div.afq-voc div.afq-voc__field > label {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #374151;
+}
+div.afq-voc div.afq-voc__field > label b {
+	color: #dc2626;
+}
+
+div.afq-voc div.afq-voc__field input[type="text"],
+div.afq-voc div.afq-voc__field select,
+div.afq-voc div.afq-voc__field textarea {
+	width: 100% !important;
+	height: auto !important;
+	margin: 0 !important;
+	border: 1px solid #dfe4ec !important;
+	border-radius: 9px !important;
+	background: #fff !important;
+	padding: 10px 12px !important;
+	font-family: inherit !important;
+	font-size: 13px !important;
+	color: #1f2937 !important;
+	box-shadow: none !important;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+div.afq-voc div.afq-voc__field input[type="text"]:focus,
+div.afq-voc div.afq-voc__field select:focus,
+div.afq-voc div.afq-voc__field textarea:focus {
+	border-color: #16264a !important;
+	box-shadow: 0 0 0 3px rgba(22, 38, 74, 0.1) !important;
+	outline: none !important;
+}
+div.afq-voc div.afq-voc__field input::placeholder,
+div.afq-voc div.afq-voc__field textarea::placeholder {
+	color: #aab2c0;
+}
+div.afq-voc div.afq-voc__field input.is-ltr {
+	direction: ltr;
+	text-align: left;
+}
+div.afq-voc div.afq-voc__field select:disabled {
+	background: #f4f6fa !important;
+	color: #9aa3b2 !important;
+	cursor: not-allowed;
+}
+div.afq-voc div.afq-voc__field textarea {
+	resize: vertical;
+	min-height: 110px;
+	line-height: 2;
+}
+div.afq-voc input.afq-voc__jalali {
+	cursor: pointer;
+}
+div.afq-voc input.afq-voc__city-other {
+	margin-top: 8px !important;
+}
+
+div.afq-voc span.afq-voc__counter {
+	align-self: flex-start;
+	font-size: 11px;
+	color: #9aa3b2;
+	direction: ltr;
+}
+div.afq-voc span.afq-voc__counter.is-short {
+	color: #dc2626;
+}
+
+div.afq-voc span.afq-voc__error {
+	display: none;
+	font-size: 11.5px;
+	color: #dc2626;
+}
+div.afq-voc div.afq-voc__field.has-error span.afq-voc__error {
+	display: block;
+}
+div.afq-voc div.afq-voc__field.has-error input[type="text"],
+div.afq-voc div.afq-voc__field.has-error select,
+div.afq-voc div.afq-voc__field.has-error textarea,
+div.afq-voc div.afq-voc__field.has-error div.afq-voc__drop {
+	border-color: #dc2626 !important;
+}
+
+/* Checkbox rows */
+div.afq-voc div.afq-voc__checks {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+div.afq-voc label.afq-voc__check {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	padding: 9px 14px;
+	border: 1px solid #dfe4ec;
+	border-radius: 9px;
+	background: #fff;
+	font-size: 12.5px;
+	color: #374151;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+div.afq-voc label.afq-voc__check:hover {
+	border-color: #16264a;
+}
+div.afq-voc label.afq-voc__check input[type="checkbox"] {
+	width: 15px !important;
+	height: 15px !important;
+	margin: 0 !important;
+	accent-color: #16264a;
+	flex-shrink: 0;
+}
+
+/* Bottom row: answer channels + upload */
+div.afq-voc div.afq-voc__bottom {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 18px;
+	margin-bottom: 18px;
+}
+div.afq-voc div.afq-voc__bottom-col {
+	min-width: 0;
+}
+
+/* Upload box */
+div.afq-voc div.afq-voc__drop {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	min-height: 132px;
+	padding: 18px;
+	border: 1px dashed #cfd7e3;
+	border-radius: 11px;
+	background: #fafbfd;
+	text-align: center;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+div.afq-voc div.afq-voc__drop.is-dragging {
+	border-color: #16264a;
+	background: #eef2f8;
+}
+div.afq-voc div.afq-voc__drop.has-file {
+	border-style: solid;
+	border-color: #16264a;
+	background: #fff;
+}
+div.afq-voc div.afq-voc__drop input[type="file"] {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+}
+div.afq-voc span.afq-voc__drop-icon {
+	color: #8894a8;
+}
+div.afq-voc span.afq-voc__drop-icon svg {
+	width: 22px;
+	height: 22px;
+}
+div.afq-voc span.afq-voc__drop-text {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #4b5563;
+}
+div.afq-voc span.afq-voc__drop-hint {
+	font-size: 11px;
+	color: #9aa3b2;
+	line-height: 1.9;
+}
+div.afq-voc span.afq-voc__drop-file {
+	font-size: 11.5px;
+	font-weight: 700;
+	color: #16264a;
+	word-break: break-all;
+}
+
+/* Terms */
+div.afq-voc div.afq-voc__field--terms {
+	margin-bottom: 18px;
+}
+div.afq-voc label.afq-voc__check--terms {
+	border: none;
+	background: none;
+	padding: 0;
+	font-size: 12.5px;
+	color: #4b5563;
+}
+div.afq-voc label.afq-voc__check--terms:hover {
+	border: none;
+}
+
+/* Honeypot */
+div.afq-voc input.afq-voc__hp {
+	position: absolute !important;
+	left: -9999px !important;
+	width: 0;
+	height: 0;
+	opacity: 0;
+	padding: 0;
+	border: none;
+}
+
+/* Submit */
+div.afq-voc div.afq-voc__footer {
+	display: flex;
+}
+div.afq-voc button.afq-voc__submit {
+	min-width: 240px;
+	margin: 0 !important;
+	padding: 13px 30px !important;
+	border: none !important;
+	border-radius: 9px !important;
+	background: linear-gradient(135deg, #1b3a6b, #0f2140) !important;
+	color: #fff !important;
+	font-family: inherit !important;
+	font-size: 13.5px !important;
+	font-weight: 700;
+	line-height: 1.6 !important;
+	cursor: pointer;
+	box-shadow: 0 8px 20px rgba(15, 33, 64, 0.25) !important;
+	transition: filter 0.15s ease, transform 0.15s ease;
+}
+div.afq-voc button.afq-voc__submit:hover {
+	filter: brightness(1.2);
+	transform: translateY(-1px);
+}
+div.afq-voc button.afq-voc__submit:disabled {
+	opacity: 0.7;
+	cursor: wait;
+	transform: none;
+}
+div.afq-voc span.afq-voc__submit-loading {
+	display: none;
+}
+div.afq-voc form.is-loading span.afq-voc__submit-loading {
+	display: inline;
+}
+div.afq-voc form.is-loading span.afq-voc__submit-text {
+	display: none;
+}
+
+div.afq-voc div.afq-voc__message {
+	display: none;
+	margin-top: 16px;
+	padding: 14px 18px;
+	border-radius: 10px;
+	font-size: 13px;
+	font-weight: 600;
+	text-align: center;
+}
+div.afq-voc div.afq-voc__message.is-error {
+	display: block;
+	background: #fdecea;
+	color: #a04a41;
+	border: 1px solid #f5c6c0;
+}
+
+/* Success panel */
+div.afq-voc div.afq-voc__success {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 12px;
+	padding: 30px 20px;
+}
+div.afq-voc span.afq-voc__success-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 62px;
+	height: 62px;
+	border-radius: 50%;
+	background: #e5f5ec;
+	color: #1f7a4d;
+}
+div.afq-voc span.afq-voc__success-icon svg {
+	width: 30px;
+	height: 30px;
+}
+div.afq-voc h3.afq-voc__success-title {
+	margin: 0 !important;
+	font-size: 17px;
+	font-weight: 700;
+	color: #16264a;
+}
+div.afq-voc p.afq-voc__success-text {
+	margin: 0 !important;
+	max-width: 520px;
+	font-size: 13px;
+	line-height: 2.1;
+	color: #6b7280;
+}
+div.afq-voc div.afq-voc__success-code {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	margin-top: 6px;
+	padding: 14px 28px;
+	border: 1px dashed #16264a;
+	border-radius: 11px;
+	background: #f6f8fc;
+}
+div.afq-voc div.afq-voc__success-code span {
+	font-size: 11.5px;
+	color: #6b7280;
+}
+div.afq-voc div.afq-voc__success-code strong {
+	font-size: 17px;
+	font-weight: 700;
+	color: #16264a;
+	direction: ltr;
+	letter-spacing: 0.5px;
+}
+div.afq-voc button.afq-voc__again {
+	margin-top: 8px !important;
+	padding: 10px 22px !important;
+	border: 1px solid #dfe4ec !important;
+	border-radius: 999px !important;
+	background: #fff !important;
+	color: #4b5563 !important;
+	font-family: inherit !important;
+	font-size: 12.5px !important;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: none !important;
+}
+div.afq-voc button.afq-voc__again:hover {
+	border-color: #16264a !important;
+	color: #16264a !important;
+}
+
+@media (max-width: 640px) {
+	div.afq-voc {
+		padding: 18px;
+	}
+	div.afq-voc div.afq-voc__grid {
+		grid-template-columns: 1fr;
+	}
+	div.afq-voc button.afq-voc__submit {
+		width: 100%;
+		min-width: 0;
+	}
+}
+
+/* =========================================================================
+ * Tracking box
+ * ====================================================================== */
+
+div.afq-track {
+	background: #fff;
+	border: 1px solid #e8ecf3;
+	border-radius: 14px;
+	padding: 22px;
+	box-shadow: 0 6px 24px rgba(15, 33, 64, 0.06);
+}
+
+div.afq-track h3.afq-track__title {
+	margin: 0 0 6px !important;
+	padding: 0 !important;
+	font-size: 15px;
+	font-weight: 700;
+	color: #16264a;
+}
+div.afq-track p.afq-track__intro {
+	margin: 0 0 16px !important;
+	font-size: 12.5px;
+	line-height: 2;
+	color: #6b7280;
+}
+
+div.afq-track div.afq-track__field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-bottom: 12px;
+}
+div.afq-track div.afq-track__field label {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #374151;
+}
+div.afq-track div.afq-track__field input {
+	width: 100% !important;
+	height: auto !important;
+	margin: 0 !important;
+	border: 1px solid #dfe4ec !important;
+	border-radius: 9px !important;
+	background: #fff !important;
+	padding: 10px 12px !important;
+	font-family: inherit !important;
+	font-size: 13px !important;
+	color: #1f2937 !important;
+	box-shadow: none !important;
+}
+div.afq-track div.afq-track__field input:focus {
+	border-color: #16264a !important;
+	box-shadow: 0 0 0 3px rgba(22, 38, 74, 0.1) !important;
+	outline: none !important;
+}
+div.afq-track div.afq-track__field input.is-ltr {
+	direction: ltr;
+	text-align: left;
+}
+div.afq-track div.afq-track__field input::placeholder {
+	color: #aab2c0;
+}
+
+div.afq-track button.afq-track__submit {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100% !important;
+	margin: 6px 0 0 !important;
+	padding: 12px 20px !important;
+	border: none !important;
+	border-radius: 9px !important;
+	background: linear-gradient(135deg, #1b3a6b, #0f2140) !important;
+	color: #fff !important;
+	font-family: inherit !important;
+	font-size: 13px !important;
+	font-weight: 700;
+	line-height: 1.6 !important;
+	cursor: pointer;
+	box-shadow: 0 8px 20px rgba(15, 33, 64, 0.2) !important;
+	transition: filter 0.15s ease;
+}
+div.afq-track button.afq-track__submit:hover {
+	filter: brightness(1.2);
+}
+div.afq-track button.afq-track__submit:disabled {
+	opacity: 0.7;
+	cursor: wait;
+}
+div.afq-track span.afq-track__submit-icon svg {
+	width: 16px;
+	height: 16px;
+	display: block;
+}
+div.afq-track span.afq-track__submit-loading {
+	display: none;
+}
+div.afq-track form.is-loading span.afq-track__submit-loading {
+	display: inline;
+}
+div.afq-track form.is-loading span.afq-track__submit-text,
+div.afq-track form.is-loading span.afq-track__submit-icon {
+	display: none;
+}
+
+div.afq-track div.afq-track__message {
+	display: none;
+	margin-top: 14px;
+	padding: 12px 14px;
+	border-radius: 10px;
+	font-size: 12.5px;
+	font-weight: 600;
+	text-align: center;
+}
+div.afq-track div.afq-track__message.is-error {
+	display: block;
+	background: #fdecea;
+	color: #a04a41;
+	border: 1px solid #f5c6c0;
+}
+
+div.afq-track div.afq-track__result {
+	margin-top: 16px;
+	border: 1px solid #eef1f6;
+	border-radius: 11px;
+	overflow: hidden;
+}
+div.afq-track div.afq-track__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 11px 14px;
+	border-bottom: 1px solid #f2f4f8;
+	font-size: 12.5px;
+}
+div.afq-track div.afq-track__row:last-child {
+	border-bottom: none;
+}
+div.afq-track div.afq-track__row span {
+	color: #8894a8;
+	flex-shrink: 0;
+}
+div.afq-track div.afq-track__row strong {
+	color: #1f2937;
+	font-weight: 700;
+	text-align: left;
+	overflow-wrap: anywhere;
+}
+div.afq-track div.afq-track__row strong.is-ltr {
+	direction: ltr;
+}
+div.afq-track span.afq-track__badge {
+	display: inline-block;
+	padding: 4px 12px;
+	border-radius: 999px;
+	font-size: 11.5px;
+	font-weight: 700;
+}
+div.afq-track div.afq-track__reply {
+	padding: 12px 14px;
+	background: #f6f8fc;
+	border-top: 1px solid #eef1f6;
+}
+div.afq-track div.afq-track__reply span {
+	display: block;
+	margin-bottom: 6px;
+	font-size: 11.5px;
+	color: #8894a8;
+}
+div.afq-track div.afq-track__reply p {
+	margin: 0 !important;
+	font-size: 12.5px;
+	line-height: 2;
+	color: #1f2937;
+}

@@ -1,0 +1,225 @@
+/**
+ * Shared look for the plugin's settings screens (signup + customer voice).
+ */
+
+.afq-settings__intro {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	padding: 18px 20px;
+	margin: 16px 0;
+	border-radius: 14px;
+	background: linear-gradient(135deg, #14181f 0%, #232a36 60%, #2c3442 100%);
+	color: #fff;
+	box-shadow: 0 10px 30px rgba(15, 20, 30, 0.08);
+}
+.afq-settings__intro .dashicons {
+	width: 42px;
+	height: 42px;
+	font-size: 24px;
+	line-height: 42px;
+	text-align: center;
+	border-radius: 12px;
+	background: linear-gradient(135deg, #d8b46a, #b8934a);
+	color: #14181f;
+	flex-shrink: 0;
+}
+.afq-settings__intro strong {
+	display: block;
+	font-size: 14px;
+	color: #e8cf9a;
+}
+.afq-settings__intro p {
+	margin: 6px 0 0;
+	font-size: 12.5px;
+	line-height: 2;
+	color: rgba(255, 255, 255, 0.75);
+	max-width: 900px;
+}
+.afq-settings__intro p strong {
+	display: inline;
+	color: #fff;
+}
+
+.afq-settings__bulk {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 14px;
+}
+.afq-settings__bulk .button {
+	border-radius: 8px;
+}
+
+.afq-settings__card {
+	background: #fff;
+	border: 1px solid #eef0f3;
+	border-radius: 12px;
+	padding: 6px 16px 16px;
+	margin-bottom: 14px;
+	box-shadow: 0 2px 8px rgba(15, 20, 30, 0.04);
+}
+.afq-settings__card h2 {
+	font-size: 13px;
+	color: #b8934a;
+	margin: 14px 0 12px;
+	padding: 0;
+}
+.afq-settings__card p.description {
+	margin: 0 0 12px;
+	font-size: 12px;
+}
+
+/* Required / optional grid */
+.afq-settings__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 8px 20px;
+}
+.afq-settings__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 9px 12px;
+	border: 1px solid #f0f2f5;
+	border-radius: 10px;
+	background: #fbfbfc;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+.afq-settings__row:hover {
+	border-color: #d8b46a;
+	background: #fff;
+}
+.afq-settings__name {
+	font-size: 13px;
+	color: #1f2937;
+	min-width: 0;
+}
+.afq-settings__name code {
+	display: block;
+	margin-top: 2px;
+	padding: 0;
+	background: none;
+	font-size: 10.5px;
+	color: #9ca3af;
+	direction: ltr;
+	text-align: right;
+}
+
+/* Switch */
+.afq-settings__switch {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+}
+.afq-settings__switch input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+	margin: 0;
+}
+.afq-settings__slider {
+	position: relative;
+	display: block;
+	width: 44px;
+	height: 24px;
+	border-radius: 999px;
+	background: #d5d9e0;
+	transition: background 0.2s ease;
+	flex-shrink: 0;
+}
+.afq-settings__slider::before {
+	content: "";
+	position: absolute;
+	top: 3px;
+	inset-inline-start: 3px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+	transition: transform 0.2s ease;
+}
+.afq-settings__switch input:checked + .afq-settings__slider {
+	background: linear-gradient(135deg, #d8b46a, #b8934a);
+}
+.afq-settings__switch input:checked + .afq-settings__slider::before {
+	transform: translateX(-20px);
+}
+.afq-settings__switch input:focus-visible + .afq-settings__slider {
+	box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.3);
+}
+.afq-settings__state {
+	font-size: 11.5px;
+	font-weight: 600;
+	color: #6b7280;
+	min-width: 42px;
+}
+
+/* Plain setting fields */
+.afq-settings__fields {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 16px;
+}
+.afq-settings__field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+.afq-settings__field--wide {
+	grid-column: 1 / -1;
+}
+.afq-settings__field > label {
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #374151;
+}
+.afq-settings__field input[type="text"],
+.afq-settings__field input[type="number"],
+.afq-settings__field textarea {
+	width: 100%;
+	border: 1px solid #e4e7ec;
+	border-radius: 10px;
+	background: #fff;
+	padding: 9px 12px;
+	font-size: 13px;
+	color: #1f2937;
+	box-shadow: 0 1px 2px rgba(15, 20, 30, 0.04);
+}
+.afq-settings__field input:focus,
+.afq-settings__field textarea:focus {
+	border-color: #c9a45c;
+	box-shadow: 0 0 0 3px rgba(201, 164, 92, 0.18);
+	outline: none;
+}
+.afq-settings__field textarea {
+	resize: vertical;
+	min-height: 110px;
+	line-height: 1.9;
+}
+.afq-settings__field .description {
+	margin: 0;
+	font-size: 11.5px;
+	color: #6b7280;
+}
+.afq-settings__field--toggle {
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 10px 12px;
+	border: 1px solid #f0f2f5;
+	border-radius: 10px;
+	background: #fbfbfc;
+	cursor: pointer;
+}
+.afq-settings__tokens {
+	direction: ltr;
+	text-align: right;
+	font-size: 11px;
+	color: #9ca3af;
+}

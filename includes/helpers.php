@@ -390,13 +390,40 @@ function afq_signup_is_valid_national_id( $value ) {
 /**
  * Validate one field value. Returns error message or empty string.
  *
+ * Kept as the signup-specific name the original code used; it now delegates
+ * to the shared validator so both forms apply identical rules.
+ *
  * @param string $rule  Validation rule.
  * @param string $value Normalized value.
  * @return string
  */
 function afq_signup_validate_value( $rule, $value ) {
+	return afq_option_validate_value( $rule, $value );
+}
+
+/**
+ * Shared field validator used by every AFQ form.
+ *
+ * @param string $rule  Validation rule.
+ * @param string $value Normalized value.
+ * @return string Error message, or an empty string when the value is fine.
+ */
+function afq_option_validate_value( $rule, $value ) {
 
 	switch ( $rule ) {
+
+		case 'vin':
+			/* 17 characters, and a real VIN never uses I, O or Q. */
+			if ( ! preg_match( '/^[A-HJ-NPR-Z0-9]{17}$/i', $value ) ) {
+				return 'شماره شاسی باید ۱۷ کاراکتر و بدون حروف I، O و Q باشد.';
+			}
+			break;
+
+		case 'number':
+			if ( ! preg_match( '/^\d{1,9}$/', $value ) ) {
+				return 'فقط عدد وارد کنید.';
+			}
+			break;
 
 		case 'national_id':
 			if ( ! afq_signup_is_valid_national_id( $value ) ) {

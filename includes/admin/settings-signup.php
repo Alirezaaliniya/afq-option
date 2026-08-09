@@ -82,7 +82,7 @@ function afq_signup_render_settings_page() {
 		}
 	}
 	?>
-	<div class="wrap afq-signup-settings">
+	<div class="wrap afq-settings afq-signup-settings">
 
 		<h1>تنظیمات فرم ثبت‌نام</h1>
 
@@ -90,7 +90,7 @@ function afq_signup_render_settings_page() {
 			<div class="notice notice-success is-dismissible"><p>تنظیمات ذخیره شد.</p></div>
 		<?php endif; ?>
 
-		<div class="afq-signup-settings__intro">
+		<div class="afq-settings__intro">
 			<span class="dashicons dashicons-forms"></span>
 			<div>
 				<strong>کدام فیلدها پر کردنشان اجباری باشد؟</strong>
@@ -109,31 +109,31 @@ function afq_signup_render_settings_page() {
 			<input type="hidden" name="action" value="afq_signup_save_settings" />
 			<?php wp_nonce_field( 'afq_signup_save_settings' ); ?>
 
-			<div class="afq-signup-settings__bulk">
-				<button type="button" class="button afq-signup-settings__all">همه ضروری</button>
-				<button type="button" class="button afq-signup-settings__none">همه اختیاری</button>
+			<div class="afq-settings__bulk">
+				<button type="button" class="button afq-settings__all">همه ضروری</button>
+				<button type="button" class="button afq-settings__none">همه اختیاری</button>
 			</div>
 
 			<?php foreach ( $groups as $group_id => $group ) : ?>
-				<div class="afq-signup-settings__card">
+				<div class="afq-settings__card">
 					<h2><?php echo esc_html( $group['label'] ); ?></h2>
 
-					<div class="afq-signup-settings__grid">
+					<div class="afq-settings__grid">
 						<?php foreach ( $group['fields'] as $key => $label ) : ?>
 							<?php $is_required = ! in_array( (string) $key, $optional, true ); ?>
-							<label class="afq-signup-settings__row">
-								<span class="afq-signup-settings__name">
+							<label class="afq-settings__row">
+								<span class="afq-settings__name">
 									<?php echo esc_html( $label ); ?>
 									<code><?php echo esc_html( $key ); ?></code>
 								</span>
 
-								<span class="afq-signup-settings__switch">
-									<input type="checkbox"
+								<span class="afq-settings__switch">
+									<input type="checkbox" data-afq-toggle
 										name="afq_signup_required[]"
 										value="<?php echo esc_attr( $key ); ?>"
 										<?php checked( $is_required ); ?> />
-									<span class="afq-signup-settings__slider"></span>
-									<span class="afq-signup-settings__state"><?php echo $is_required ? 'ضروری' : 'اختیاری'; ?></span>
+									<span class="afq-settings__slider"></span>
+									<span class="afq-settings__state" data-on="ضروری" data-off="اختیاری"><?php echo $is_required ? 'ضروری' : 'اختیاری'; ?></span>
 								</span>
 							</label>
 						<?php endforeach; ?>

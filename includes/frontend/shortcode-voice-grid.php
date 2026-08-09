@@ -1,6 +1,6 @@
 <?php
 /**
- * [afq_voice_grid] — Customer testimonials grid ("صدای مشتری").
+ * [afq_voice_grid] — Customer testimonials grid ("نظرات مشتریان").
  *
  *   [afq_voice_grid]                → all items, 3 columns on desktop
  *   [afq_voice_grid count="6"]      → limit items

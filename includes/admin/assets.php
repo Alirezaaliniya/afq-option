@@ -56,11 +56,16 @@ function afq_option_admin_assets( $hook ) {
 		wp_enqueue_script( 'afq-car-details', $js . 'admin-car-details.js', array( 'afq-car-media' ), $ver, true );
 	}
 
-	/* ---- Signup: form settings screen. ---- */
+	/* ---- Settings screens (shared UI). ---- */
 
-	if ( 'afq_signup_page_afq-signup-settings' === $hook ) {
-		wp_enqueue_style( 'afq-signup-admin', $css . 'admin-signup.css', array(), $ver );
-		wp_enqueue_script( 'afq-signup-settings', $js . 'admin-signup-settings.js', array(), $ver, true );
+	$settings_screens = array(
+		'afq_signup_page_afq-signup-settings',
+		'afq_request_page_afq-request-settings',
+	);
+
+	if ( in_array( $hook, $settings_screens, true ) ) {
+		wp_enqueue_style( 'afq-settings', $css . 'admin-settings.css', array(), $ver );
+		wp_enqueue_script( 'afq-settings', $js . 'admin-settings.js', array(), $ver, true );
 		return;
 	}
 
@@ -93,6 +98,12 @@ function afq_option_admin_assets( $hook ) {
 
 	if ( 'afq_signup' === $screen->post_type && 'post.php' === $hook ) {
 		wp_enqueue_style( 'afq-signup-admin', $css . 'admin-signup.css', array(), $ver );
+	}
+
+	/* ---- Customer voice requests (view screen only). ---- */
+
+	if ( 'afq_request' === $screen->post_type && 'post.php' === $hook ) {
+		wp_enqueue_style( 'afq-request-admin', $css . 'admin-request.css', array(), $ver );
 	}
 }
 add_action( 'admin_enqueue_scripts', 'afq_option_admin_assets' );

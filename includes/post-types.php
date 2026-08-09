@@ -21,6 +21,7 @@ function afq_option_register_content_types() {
 	afq_register_rep_post_type();
 	afq_register_circular_post_type();
 	afq_register_signup_post_type();
+	afq_register_request_post_type();
 }
 add_action( 'init', 'afq_option_register_content_types' );
 
@@ -175,23 +176,27 @@ function afq_register_faq_post_type() {
  * ---------------------------------------------------------------------- */
 
 /**
- * Register customer voice post type.
+ * Register the customer testimonials post type ("نظرات مشتریان").
+ *
+ * Distinct from afq_request ("صدای مشتری"), which holds incoming requests
+ * and complaints. The afq_voice slug, [afq_voice_grid] shortcode and CSS
+ * classes are unchanged — only the dashboard labels were renamed.
  */
 function afq_register_voice_post_type() {
 
 	$labels = array(
-		'name'               => 'صدای مشتریان',
-		'singular_name'      => 'صدای مشتری',
-		'menu_name'          => 'صدای مشتریان',
-		'add_new'            => 'افزودن مشتری',
-		'add_new_item'       => 'افزودن صدای مشتری جدید',
-		'edit_item'          => 'ویرایش صدای مشتری',
-		'new_item'           => 'صدای مشتری جدید',
-		'view_item'          => 'مشاهده',
-		'search_items'       => 'جستجو',
-		'not_found'          => 'موردی یافت نشد',
-		'not_found_in_trash' => 'موردی در زباله‌دان یافت نشد',
-		'all_items'          => 'همه موارد',
+		'name'               => 'نظرات مشتریان',
+		'singular_name'      => 'نظر مشتری',
+		'menu_name'          => 'نظرات مشتریان',
+		'add_new'            => 'افزودن نظر',
+		'add_new_item'       => 'افزودن نظر جدید',
+		'edit_item'          => 'ویرایش نظر مشتری',
+		'new_item'           => 'نظر جدید',
+		'view_item'          => 'مشاهده نظر',
+		'search_items'       => 'جستجوی نظر',
+		'not_found'          => 'نظری یافت نشد',
+		'not_found_in_trash' => 'نظری در زباله‌دان یافت نشد',
+		'all_items'          => 'همه نظرات',
 	);
 
 	$args = array(
@@ -360,6 +365,49 @@ function afq_register_circular_post_type() {
 			'auth_callback'     => static function () {
 				return current_user_can( 'edit_posts' );
 			},
+		)
+	);
+}
+
+/* -------------------------------------------------------------------------
+ * Customer Voice Requests
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Register the customer voice request post type (dashboard only).
+ */
+function afq_register_request_post_type() {
+
+	register_post_type(
+		'afq_request',
+		array(
+			'labels'              => array(
+				'name'               => 'صدای مشتری',
+				'singular_name'      => 'درخواست',
+				'menu_name'          => 'صدای مشتری',
+				'edit_item'          => 'مشاهده درخواست',
+				'search_items'       => 'جستجوی درخواست',
+				'not_found'          => 'درخواستی یافت نشد',
+				'not_found_in_trash' => 'درخواستی در زباله‌دان یافت نشد',
+				'all_items'          => 'همه درخواست‌ها',
+			),
+			'public'              => false,
+			'publicly_queryable'  => false,
+			'exclude_from_search' => true,
+			'has_archive'         => false,
+			'rewrite'             => false,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'show_in_rest'        => false,
+			'menu_icon'           => 'dashicons-format-chat',
+			'menu_position'       => 26,
+			'supports'            => array( 'title' ),
+			'capability_type'     => 'post',
+			'capabilities'        => array(
+				'create_posts' => 'do_not_allow',
+			),
+			'map_meta_cap'        => true,
+			'hierarchical'        => false,
 		)
 	);
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Customer voice meta box ("اطلاعات مشتری").
+ * Customer testimonial meta box ("اطلاعات نظر مشتری").
  *
  * Meta keys:
  *   _afq_voice_image  (attachment ID — customer photo)
@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 function afq_voice_add_meta_box() {
 	add_meta_box(
 		'afq_voice_details',
-		'اطلاعات مشتری',
+		'اطلاعات نظر مشتری',
 		'afq_voice_meta_box_callback',
 		'afq_voice',
 		'normal',
@@ -80,7 +80,7 @@ function afq_voice_meta_box_callback( $post ) {
 			</div>
 
 			<div class="afq-voice-admin__card afq-voice-media-field" data-media-type="audio">
-				<span class="afq-voice-admin__label">صدای مشتری (ویس)</span>
+				<span class="afq-voice-admin__label">فایل صوتی نظر (ویس)</span>
 				<input type="url"
 					class="afq-voice-admin__input afq-voice-media-url"
 					name="_afq_voice_audio"
